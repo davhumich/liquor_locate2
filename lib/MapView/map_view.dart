@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:liquor_locate2/StoreView/condensed_store_view.dart';
 
 class MapView extends StatefulWidget {
   const MapView({ super.key });
@@ -13,7 +14,7 @@ class _MapView extends State<MapView> {
 
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(42.279594, -83.732124);
 
   TextEditingController textController = TextEditingController();
 
@@ -30,23 +31,25 @@ class _MapView extends State<MapView> {
             style: TextStyle(color: Colors.white),
           ),
           elevation: 3,
-          backgroundColor: Color.fromARGB(255, 236, 87, 95),
+          backgroundColor: const Color.fromARGB(255, 236, 87, 95),
         ),
-        body: Stack(
+        body: Column(
           children: [
-            Container(
+            Stack(
+          children: [
+            SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height/2,
+          height: MediaQuery.of(context).size.height - 305,
           child: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: _center,
-            zoom: 11.0,
+            zoom: 12.5,
           ),
         ),
         ),
             Container(
-          margin: EdgeInsets.only(left: 20, right: 20),
+          margin: const EdgeInsets.only(left: 20, right: 20),
           child: AnimSearchBar(
         onSubmitted: (value) {
         },
@@ -59,6 +62,9 @@ class _MapView extends State<MapView> {
         },
       ),
         ),
+          ],
+        ),
+        const CondensedStoreView()
           ],
         )
     );

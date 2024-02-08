@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liquor_locate2/MapView/map_view.dart';
+import 'package:liquor_locate2/ProfileView/profile_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,24 +34,60 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Testing Git Commands',
-            ),
-          ],
+    return PersistentTabView(
+      context,
+      hideNavigationBarWhenKeyboardShows: true,
+      controller: _controller,
+      screens: [
+        MapView(),
+        ListView(),
+        ProfileView(),
+      ],
+      items: _navBarsItems(),
+      navBarStyle: NavBarStyle.style1,
+      decoration: NavBarDecoration(
+        border: const Border(
+          top: BorderSide(width: 0.3),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 4,
+            blurRadius: 6,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
     );
   }
+
+
+
+List<PersistentBottomNavBarItem> _navBarsItems() {
+  return [
+    PersistentBottomNavBarItem(
+      icon: const Icon(CupertinoIcons.map),
+      title: ("Map"),
+      activeColorPrimary: const Color(0xFF7D6756),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(CupertinoIcons.list_dash),
+      title: ("Stores"),
+      activeColorPrimary: const Color(0xFF7D6756),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(CupertinoIcons.profile_circled),
+      title: ("Profile"),
+      activeColorPrimary: const Color(0xFF7D6756),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+  ];
+}
 }

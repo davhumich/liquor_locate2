@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   persistent_bottom_nav_bar: ^5.0.2
   anim_search_bar: ^2.0.3
+  google_maps_flutter: ^2.5.3
 
 dev_dependencies:
   flutter_test:

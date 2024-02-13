@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liquor_locate2/ListView/store_view.dart';
 import 'package:liquor_locate2/MapView/map_view.dart';
 import 'package:liquor_locate2/ProfileView/profile_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +19,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'LiquorLocate',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        // flutter locals see [https://docs.flutter.dev/development/accessibility-and-localization/internationalization]
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
+        textTheme: GoogleFonts.kanitTextTheme(),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -43,9 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       hideNavigationBarWhenKeyboardShows: true,
       controller: _controller,
-      screens: [
+      screens: const [
         MapView(),
-        ListView(),
+        StoresView(),
         ProfileView(),
       ],
       items: _navBarsItems(),

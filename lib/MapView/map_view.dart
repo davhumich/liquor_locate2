@@ -41,6 +41,11 @@ class _MapView extends State<MapView> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height - 305,
           child: GoogleMap(
+          markers: {
+            const Marker(markerId: MarkerId("id1"), position: LatLng(42.261240502744414, -83.73059051035652)),
+            const Marker(markerId: MarkerId("id1"), position: LatLng(42.27123967529914, -83.73975634176435)),
+            const Marker(markerId: MarkerId("id1"), position: LatLng(42.258599513621036, -83.73739599788769))
+            },
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: _center,
@@ -64,7 +69,14 @@ class _MapView extends State<MapView> {
         ),
           ],
         ),
-        const CondensedStoreView()
+        Container(
+          decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 95, 95, 95)),
+
+                ),
+          child: const CondensedStoreView(storeImagePath: 'lib/assets/testLogo.jpg', storeName: "Stadium Market", storeMilage: "0.25 Miles Away", storeRating: 4.6, price: 12.97, color: Colors.green),
+        )
           ],
         )
     );

@@ -13,13 +13,13 @@ the tab controller so we can switch between tabs.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:liquor_locate2/ListView/list_view.dart';
 
 // External packages from pub.dev
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Internal files located in this directory
-import 'package:liquor_locate2/ListView/store_view.dart';
 import 'package:liquor_locate2/MapView/map_view.dart';
 import 'package:liquor_locate2/ProfileView/profile_view.dart';
 
@@ -79,7 +79,7 @@ class _TabViewState extends State<TabView> {
       controller: _controller,
       screens: const [
         MapView(),
-        StoresView(),
+        ListScreen(),
         ProfileView(),
       ],
       items: _navBarsItems(), // Referenced below

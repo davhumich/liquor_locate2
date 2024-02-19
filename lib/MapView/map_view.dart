@@ -15,7 +15,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // Internal files located in this directory
-import 'package:liquor_locate2/StoreView/condensed_store_view.dart';
+import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});

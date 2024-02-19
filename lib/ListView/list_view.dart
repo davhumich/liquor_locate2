@@ -15,7 +15,7 @@ import 'package:material_floating_search_bar_2/material_floating_search_bar_2.da
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 // Internal files located in this directory
-import 'package:liquor_locate2/StoreView/condensed_store_view.dart';
+import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
 
 // (ListView is already a flutter class, so we should use ListScreen as to not mix up the two)
 class ListScreen extends StatefulWidget {

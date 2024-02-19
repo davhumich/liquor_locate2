@@ -22,9 +22,16 @@ class _ProfileView extends State<ProfileView> {
   // This is the actual widget that creates the interface
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFFFE306),
-      child: const Center(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Profile View",
+          style: TextStyle(color: Colors.white),
+        ),
+        elevation: 3,
+        backgroundColor: const Color.fromARGB(255, 236, 87, 95),
+      ),
+      body: const Center(
         child: Text("Profile View"),
       ),
     );

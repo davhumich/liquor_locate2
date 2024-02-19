@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 
 // External packages from pub.dev
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+import 'package:liquor_locate2/StoreViews/expanded_store_view.dart';
 
 class CondensedStoreView extends StatefulWidget {
   const CondensedStoreView(
@@ -38,8 +38,7 @@ class CondensedStoreView extends StatefulWidget {
 }
 
 class _CondensedStoreView extends State<CondensedStoreView> {
-
-  // The variables initialzed in the actual view 
+  // The variables initialzed in the actual view
   // (The reason they are late is because they are initialzed in initState, which is called after the widget loads)
   late String storeImagePath;
   late String storeName;
@@ -62,83 +61,97 @@ class _CondensedStoreView extends State<CondensedStoreView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // This is the outside container used to contain the view
-      height: 98,
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: Container(
-              // Store image Widget
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 0.5, color: Colors.grey),
-                ),
-                child: ClipOval(
-                    child: SizedBox.fromSize(
-                  size: const Size.fromRadius(48), // Image radius
-                  child: Image(image: AssetImage(storeImagePath)),
-                ))),
+    // This InkWell object makes it so when the user taps on this view, 
+    // they will be taken to the expanded store view
+    return InkWell(
+      onTap: () {
+        // Pushes the Expanded store view onto the Widget Stack
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            // Const for now, will enevtually need to input the store id, so it can load the actual store data
+            builder: (BuildContext context) => const ExpandedStoreView(),
           ),
-          Container(
-            // Store name, milage and rating
-            padding: const EdgeInsets.all(5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(storeName),
-                ),
-                Expanded(
-                  child: Text(storeMilage),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      RatingBarIndicator(
-                        rating: storeRating,
-                        itemBuilder: (context, index) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        itemCount: 5,
-                        itemSize: 16,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 3),
-                        child: Text(
-                          storeRating.toString(),
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ],
+        );
+      },
+      child: Container(
+        // This is the outside container used to contain the view
+        height: 98,
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Container(
+                  // Store image Widget
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(width: 0.5, color: Colors.grey),
                   ),
-                )
-              ],
+                  child: ClipOval(
+                      child: SizedBox.fromSize(
+                    size: const Size.fromRadius(48), // Image radius
+                    child: Image(image: AssetImage(storeImagePath)),
+                  ))),
             ),
-          ),
-          const Spacer(),
-          // Drink logo (Hard coded as titos for now, but will need to change)
-          Container(
-            width: 60,
-            height: 60,
-            padding: const EdgeInsets.only(right: 10),
-            child: const Image(image: AssetImage('lib/assets/titos.png')),
-          ),
-          // Price
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: Text(
-              "\$$price",
-              style: TextStyle(fontSize: 18, color: color),
+            Container(
+              // Store name, milage and rating
+              padding: const EdgeInsets.all(5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(storeName),
+                  ),
+                  Expanded(
+                    child: Text(storeMilage),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        RatingBarIndicator(
+                          rating: storeRating,
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 16,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3),
+                          child: Text(
+                            storeRating.toString(),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+            const Spacer(),
+            // Drink logo (Hard coded as titos for now, but will need to change)
+            Container(
+              width: 60,
+              height: 60,
+              padding: const EdgeInsets.only(right: 10),
+              child: const Image(image: AssetImage('lib/assets/titos.png')),
+            ),
+            // Price
+            Container(
+              padding: const EdgeInsets.only(right: 10),
+              child: Text(
+                "\$$price",
+                style: TextStyle(fontSize: 18, color: color),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

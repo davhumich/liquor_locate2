@@ -9,6 +9,7 @@ and the more detailed store view loads
 
 // Flutter tool packages
 import 'package:flutter/material.dart';
+import 'package:liquor_locate2/StoreViews/store_header_view.dart';
 
 // (Stateful widget because eventually the data will need to chnage based on what store is being loaded)
 class ExpandedStoreView extends StatefulWidget {
@@ -31,9 +32,11 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
         elevation: 3,
         backgroundColor: const Color.fromARGB(255, 236, 87, 95),
       ),
-      body: const Center(
-        child: Text("Expanded Store View"),
-      ),
+      body: const Column(
+        children: [
+          StoreHeaderView(),
+        ],
+      )
     );
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "246359242461",
+    "project_id": "liquorlocate-8020c",
+    "storage_bucket": "liquorlocate-8020c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246359242461:android:f8bc884a1ddc64fe89cd34",
+        "android_client_info": {
+          "package_name": "com.example.liquor_locate2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTD7X15X2HZWZiaMJbaXCv2qfkBHIo6WQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

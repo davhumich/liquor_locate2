@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class StoreHeaderView extends StatelessWidget {
-  const StoreHeaderView({super.key});
+  const StoreHeaderView({super.key, required this.storeName});
+  final String storeName;
 
   @override
   Widget build(BuildContext context) {
@@ -40,20 +41,9 @@ class StoreHeaderView extends StatelessWidget {
                   ),
                   child: Container(
                     padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 165, 165, 165)
-                              .withOpacity(0.75)),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                    ),
                     child: Text(
-                      "Stadium Market",
-                      style: const TextStyle(
+                      storeName,
+                      style: TextStyle(
                           fontSize: 30,
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
@@ -67,7 +57,7 @@ class StoreHeaderView extends StatelessWidget {
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
                       child:
-                          Image(image: AssetImage("lib/assets/testLogo.jpg")),
+                          const Image(image: AssetImage("lib/assets/testLogo.jpg")),
                     ),
                   ),
                 ),
@@ -105,9 +95,9 @@ class StoreHeaderView extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    child: Text(
+                    child: const Text(
                       "4.6",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
@@ -122,9 +112,9 @@ class StoreHeaderView extends StatelessWidget {
                 children: [
                   Container(
                     margin: const EdgeInsets.all(15),
-                    child: Text(
+                    child: const Text(
                       "1423 E Stadium Blvd STE D, Ann Arbor, MI 48104",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
@@ -139,15 +129,32 @@ class StoreHeaderView extends StatelessWidget {
           ),
         ),
         Container(
-          
-            width: MediaQuery.of(context).size.width - 50,
-            height: 50,
-            child: ElevatedButton(
-              style: ButtonStyle(),
-              onPressed: () {
-              },
-              child: Text("data"),
-            ),),
+          margin: const EdgeInsets.all(20),
+          width: MediaQuery.of(context).size.width - 10,
+          height: 50,
+          child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
+              onPressed: () {},
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Get Directions",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Icon(
+                    Icons.share_location,
+                    color: Colors.white,
+                  )
+                ],
+              )),
+        ),
+        const Divider(),
       ],
     );
   }

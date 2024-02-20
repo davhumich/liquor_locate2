@@ -50,7 +50,6 @@ class _ListScreen extends State<ListScreen> {
       body: Stack(
         // (Using a stack here so the search bar doesn't push the other widgets down when it is expanded)
         children: [
-
           FutureBuilder(
           future: storeInit(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {

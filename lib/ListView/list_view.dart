@@ -102,14 +102,14 @@ class _ListScreen extends State<ListScreen> {
                                 ),
                               ),
                               // This is where the list of stores begin
-                              Divider(height: 1,),
+                              const Divider(height: 1,),
                               for (var storeId in storeIds)
                                 Column(
                                   children: [
                                     CondensedStoreView(
                                       storeId: storeId,
                                     ),
-                                    Divider(height: 1,),
+                                    const Divider(height: 1,),
                                   ],
                                 )
                             ],

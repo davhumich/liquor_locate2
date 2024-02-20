@@ -58,7 +58,7 @@ class StoreHeaderView extends StatelessWidget {
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
                       child:
-                          Image(image: AssetImage(store.logoString)),
+                          store.logo,
                     ),
                   ),
                 ),

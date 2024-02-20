@@ -88,7 +88,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                   child: ClipOval(
                       child: SizedBox.fromSize(
                     size: const Size.fromRadius(48), // Image radius
-                    child: Image(image: AssetImage(store.logoString)),
+                    child: store.logo,
                   ))),
             ),
             Container(

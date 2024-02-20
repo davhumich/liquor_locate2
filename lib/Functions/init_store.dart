@@ -1,26 +1,26 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:liquor_locate2/Models/store_model.dart';
 
-Future<String> initStore(String storeId) async {
-    String storeName;
-
+Future<Store> initStore (String storeId) async {
+    Store store = Store.empty();
     try {
         CollectionReference storesCollection = FirebaseFirestore.instance.collection('stores');
         DocumentSnapshot storeSnapshot = await storesCollection.doc(storeId).get();
 
         if (storeSnapshot.exists){
-            storeName = storeSnapshot['Name'];
+            store.name = storeSnapshot['Name'];
+            store.logoString = storeSnapshot["Image"];
+            store.rating = storeSnapshot["StarRating"];
+            store.address = storeSnapshot["Address"];
         }
         else{
-            storeName = "Store Not Found";
+            store.name = "Store Not Found";
         }
 
     }
     catch(e){
-        storeName = 'Error initializing store: $e';
-        print('Error initializing store: $e');
+        store.name = 'Error initializing store: $e';
     }
-
-    return storeName;
-
+    return store;
 }

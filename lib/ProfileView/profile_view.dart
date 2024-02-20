@@ -40,28 +40,28 @@ class _ProfileView extends State<ProfileView> {
                   // Implement Log Out functionality
                   // You can handle log out logic here
                 },
-                child: Text('Edit Profile'),
+                child: const Text('Edit Profile'),
               ),
               ElevatedButton(
                 onPressed: () {
                   // Implement Log Out functionality
                   // You can handle log out logic here
                 },
-                child: Text('Log Out'),
+                child: const Text('Log Out'),
               ),
               ElevatedButton(
                 onPressed: () {
                   // Navigate to Settings screen
                   // You can implement the navigation logic here
                 },
-                child: Text('View Settings'),
+                child: const Text('View Settings'),
               ),
               ElevatedButton(
                 onPressed: () {
                   // Implement Delete Account functionality
                   // You can handle account deletion logic here
                 },
-                child: Text('Delete Account'),
+                child: const Text('Delete Account'),
               ),
             ],
         )

@@ -7,10 +7,11 @@ View for the store header
 // Flutter tool packages
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liquor_locate2/Models/store_model.dart';
 
 class StoreHeaderView extends StatelessWidget {
-  const StoreHeaderView({super.key, required this.storeName});
-  final String storeName;
+  const StoreHeaderView({super.key, required this.store});
+  final Store store;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,8 @@ class StoreHeaderView extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(3),
                     child: Text(
-                      storeName,
-                      style: TextStyle(
+                      store.name,
+                      style: const TextStyle(
                           fontSize: 30,
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
@@ -57,7 +58,7 @@ class StoreHeaderView extends StatelessWidget {
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
                       child:
-                          const Image(image: AssetImage("lib/assets/testLogo.jpg")),
+                          Image(image: AssetImage(store.logoString)),
                     ),
                   ),
                 ),
@@ -85,7 +86,7 @@ class StoreHeaderView extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.all(15),
                     child: RatingBarIndicator(
-                      rating: 4.6,
+                      rating: store.rating,
                       itemBuilder: (context, index) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -94,12 +95,10 @@ class StoreHeaderView extends StatelessWidget {
                       itemSize: 16,
                     ),
                   ),
-                  Container(
-                    child: const Text(
-                      "4.6",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                  Text(
+                    store.rating.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -112,9 +111,9 @@ class StoreHeaderView extends StatelessWidget {
                 children: [
                   Container(
                     margin: const EdgeInsets.all(15),
-                    child: const Text(
-                      "1423 E Stadium Blvd STE D, Ann Arbor, MI 48104",
-                      style: TextStyle(
+                    child: Text(
+                      store.address,
+                      style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),

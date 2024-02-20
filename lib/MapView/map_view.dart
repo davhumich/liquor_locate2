@@ -105,13 +105,7 @@ class _MapView extends State<MapView> {
             decoration: BoxDecoration(
               border: Border.all(color: const Color.fromARGB(255, 95, 95, 95)),
             ),
-            child: const CondensedStoreView(
-                storeImagePath: 'lib/assets/testLogo.jpg',
-                storeName: "Stadium Market",
-                storeMilage: "0.25 Miles Away",
-                storeRating: 4.6,
-                price: 12.97,
-                color: Colors.green),
+            child: const CondensedStoreView(storeId: "4jzwzudEmlcNbTQMR2Sl",),
           )
         ],
       ),

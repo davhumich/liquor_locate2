@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:liquor_locate2/ListView/list_view.dart';
+import 'package:liquor_locate2/firebase_options.dart';
 
 // External packages from pub.dev
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -23,13 +24,12 @@ import 'package:liquor_locate2/MapView/map_view.dart';
 import 'package:liquor_locate2/ProfileView/profile_view.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 
 // Main function to run the application
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(const LiquorLocate());
 }
 

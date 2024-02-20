@@ -9,6 +9,7 @@ should take place in an external file
 
 // Flutter tool packages
 import 'package:flutter/material.dart';
+import 'package:liquor_locate2/Functions/init_list_view.dart';
 
 // External packages from pub.dev
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
@@ -26,6 +27,14 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreen extends State<ListScreen> {
+
+  late List<String> storeIds;
+
+  Future<String> storeInit() async {
+    storeIds = await initListViewIds();
+    return 'Done';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +50,17 @@ class _ListScreen extends State<ListScreen> {
       body: Stack(
         // (Using a stack here so the search bar doesn't push the other widgets down when it is expanded)
         children: [
-          Container(
+
+          FutureBuilder(
+          future: storeInit(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("loading...");
+            } else {
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return Container(
             margin: const EdgeInsets.only(top: 70),
             child: Column(
               children: [
@@ -80,69 +99,15 @@ class _ListScreen extends State<ListScreen> {
                   ),
                 ),
                 // This is where the list of stores begin
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Color.fromARGB(255, 95, 95, 95),
-                      ),
-                    ),
-                  ),
-                  // The temporary static store views currently being displayed, 
-                  // eventually we will integrate this with our database so it will change on user input
-                  child: const CondensedStoreView(
-                      storeImagePath: 'lib/assets/testLogo.jpg',
-                      storeName: "Stadium Market",
-                      storeMilage: "0.25 Miles Away",
-                      storeRating: 4.6,
-                      price: 12.97,
-                      color: Colors.green),
-                ),
-                const CondensedStoreView(
-                    storeImagePath: 'lib/assets/testlogo2.png',
-                    storeName: "Main Street Beer and Wine",
-                    storeMilage: "0.71 Miles Away",
-                    storeRating: 3.6,
-                    price: 21.17,
-                    color: Colors.red),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Color.fromARGB(255, 95, 95, 95),
-                      ),
-                      bottom: BorderSide(
-                        color: Color.fromARGB(255, 95, 95, 95),
-                      ),
-                    ),
-                  ),
-                  child: const CondensedStoreView(
-                      storeImagePath: 'lib/assets/testlogo3.jpg',
-                      storeName: "Champion's Party Store",
-                      storeMilage: "1.3 Miles Away",
-                      storeRating: 3.1,
-                      price: 16.65,
-                      color: Color.fromARGB(255, 179, 165, 42)),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Color.fromARGB(255, 95, 95, 95),
-                      ),
-                    ),
-                  ),
-                  child: const CondensedStoreView(
-                      storeImagePath: 'lib/assets/testlogo4.jpg',
-                      storeName: "Campus Corner",
-                      storeMilage: "1.67 Miles Away",
-                      storeRating: 4.2,
-                      price: 13.55,
-                      color: Colors.green),
-                ),
+                for (var storeId in storeIds)
+                CondensedStoreView(storeId: storeId,)
               ],
             ),
-          ),
+          );
+              }
+            }
+          }),
+
           // This is the search bar, it is at the bottom so that it will be at the top of the
           // stack when the view loads, this way, when it expands it will be in front of the store views
           SizedBox(

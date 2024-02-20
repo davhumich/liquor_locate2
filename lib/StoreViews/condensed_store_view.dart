@@ -12,26 +12,16 @@ import 'package:flutter/material.dart';
 
 // External packages from pub.dev
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liquor_locate2/Functions/init_store.dart';
+import 'package:liquor_locate2/Models/store_model.dart';
 import 'package:liquor_locate2/StoreViews/expanded_store_view.dart';
 
 class CondensedStoreView extends StatefulWidget {
-  const CondensedStoreView(
-      {super.key,
-      required this.storeImagePath,
-      required this.storeName,
-      required this.storeMilage,
-      required this.storeRating,
-      required this.price,
-      required this.color});
+  const CondensedStoreView({super.key, required this.storeId});
 
   // These are the varibles we input to the view so it will load with different stores
   // (Eventually we will only input a store id and load it from the database directly from this view)
-  final String storeImagePath;
-  final String storeName;
-  final String storeMilage;
-  final double storeRating;
-  final double price;
-  final Color color;
+  final String storeId;
 
   @override
   State<CondensedStoreView> createState() => _CondensedStoreView();
@@ -40,37 +30,42 @@ class CondensedStoreView extends StatefulWidget {
 class _CondensedStoreView extends State<CondensedStoreView> {
   // The variables initialzed in the actual view
   // (The reason they are late is because they are initialzed in initState, which is called after the widget loads)
-  late String storeImagePath;
-  late String storeName;
-  late String storeMilage;
-  late double storeRating;
-  late double price;
-  late Color color;
+  late String storeId;
+  late Store store;
 
   // This function takes the variables inputed above and initialzes them in this state
   @override
   void initState() {
     super.initState();
-    storeImagePath = widget.storeImagePath;
-    storeName = widget.storeName;
-    storeMilage = widget.storeMilage;
-    storeRating = widget.storeRating;
-    price = widget.price;
-    color = widget.color;
+    storeId = widget.storeId;
+  }
+
+  Future<String> storeInit() async {
+    store = await initStore(storeId);
+    return 'Done';
   }
 
   @override
   Widget build(BuildContext context) {
-    // This InkWell object makes it so when the user taps on this view, 
+    // This InkWell object makes it so when the user taps on this view,
     // they will be taken to the expanded store view
-    return InkWell(
+    return FutureBuilder(
+          future: storeInit(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("loading...");
+            } else {
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return InkWell(
       onTap: () {
         // Pushes the Expanded store view onto the Widget Stack
         Navigator.push(
           context,
           MaterialPageRoute(
             // Const for now, will enevtually need to input the store id, so it can load the actual store data
-            builder: (BuildContext context) => const ExpandedStoreView(),
+            builder: (BuildContext context) => ExpandedStoreView(storeId: storeId,),
           ),
         );
       },
@@ -93,7 +88,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                   child: ClipOval(
                       child: SizedBox.fromSize(
                     size: const Size.fromRadius(48), // Image radius
-                    child: Image(image: AssetImage(storeImagePath)),
+                    child: Image(image: AssetImage(store.logoString)),
                   ))),
             ),
             Container(
@@ -104,16 +99,16 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(storeName),
+                    child: Text(store.name),
                   ),
-                  Expanded(
-                    child: Text(storeMilage),
+                  const Expanded(
+                    child: Text("0.6"),
                   ),
                   Expanded(
                     child: Row(
                       children: [
                         RatingBarIndicator(
-                          rating: storeRating,
+                          rating: store.rating,
                           itemBuilder: (context, index) => const Icon(
                             Icons.star,
                             color: Colors.amber,
@@ -124,7 +119,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                         Padding(
                           padding: const EdgeInsets.only(left: 3),
                           child: Text(
-                            storeRating.toString(),
+                            store.rating.toString(),
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
@@ -145,14 +140,17 @@ class _CondensedStoreView extends State<CondensedStoreView> {
             // Price
             Container(
               padding: const EdgeInsets.only(right: 10),
-              child: Text(
-                "\$$price",
-                style: TextStyle(fontSize: 18, color: color),
+              child: const Text(
+                "\$",
+                style: TextStyle(fontSize: 18, color: Colors.blue),
               ),
             ),
           ],
         ),
       ),
     );
+              }
+            }
+          });
   }
 }

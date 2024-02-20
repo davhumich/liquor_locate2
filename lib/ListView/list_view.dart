@@ -102,7 +102,6 @@ class _ListScreen extends State<ListScreen> {
                                 ),
                               ),
                               // This is where the list of stores begin
-                              const Divider(height: 1,),
                               for (var storeId in storeIds)
                                 Column(
                                   children: [

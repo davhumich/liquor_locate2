@@ -11,6 +11,7 @@ and the more detailed store view loads
 import 'package:flutter/material.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
+import 'package:liquor_locate2/Placeholder%20Skeletons/store_header_placeholder.dart';
 import 'package:liquor_locate2/StoreViews/store_header_view.dart';
 
 // (Stateful widget because eventually the data will need to chnage based on what store is being loaded)
@@ -53,7 +54,11 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
           future: storeInit(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text("loading...");
+              return const Column(
+                  children: [
+                    StoreHeaderPlaceholder(),
+                  ],
+                );
             } else {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));

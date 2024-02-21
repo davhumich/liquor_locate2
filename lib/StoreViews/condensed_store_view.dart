@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
+import 'package:liquor_locate2/Placeholder%20Skeletons/condensed_store_placeholder.dart';
 import 'package:liquor_locate2/StoreViews/expanded_store_view.dart';
 
 class CondensedStoreView extends StatefulWidget {
@@ -53,7 +54,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
           future: storeInit(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text("loading...");
+              return const CondensedStorePlaceholder();
             } else {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));

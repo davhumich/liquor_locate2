@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:liquor_locate2/Functions/init_list_view.dart';
 
 // External packages from pub.dev
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 // Internal files located in this directory
@@ -120,51 +119,7 @@ class _ListScreen extends State<ListScreen> {
 
           // This is the search bar, it is at the bottom so that it will be at the top of the
           // stack when the view loads, this way, when it expands it will be in front of the store views
-          SizedBox(
-            width: 500,
-            height: MediaQuery.of(context).size.height - 205,
-            child: FloatingSearchBar(
-              hint: 'Fifth of Titos',
-              hintStyle: const TextStyle(color: Colors.black),
-              scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-              transitionDuration: const Duration(milliseconds: 800),
-              transitionCurve: Curves.easeInOut,
-              physics: const BouncingScrollPhysics(),
-              axisAlignment: 0,
-              openAxisAlignment: 0.0,
-              width: 500,
-              debounceDelay: const Duration(milliseconds: 500),
-              onQueryChanged: (query) {},
-              transition: CircularFloatingSearchBarTransition(),
-              actions: [
-                FloatingSearchBarAction(
-                  showIfOpened: false,
-                  child: CircularButton(
-                    icon: const Icon(Icons.filter_list_rounded),
-                    onPressed: () {},
-                  ),
-                ),
-                FloatingSearchBarAction.searchToClear(
-                  showIfClosed: false,
-                ),
-              ],
-              builder: (context, transition) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Material(
-                    color: Colors.white,
-                    elevation: 4.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: Colors.accents.map((color) {
-                        return Container(height: 112, color: color);
-                      }).toList(),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+
         ],
       ),
     );

@@ -41,7 +41,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
     storeId = widget.storeId;
   }
 
-  Future<String> storeInit() async {
+  Future<String> storeIdInit() async {
     store = await initStore(storeId);
     return 'Done';
   }
@@ -51,7 +51,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
     // This InkWell object makes it so when the user taps on this view,
     // they will be taken to the expanded store view
     return FutureBuilder(
-          future: storeInit(),
+          future: storeIdInit(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CondensedStorePlaceholder();

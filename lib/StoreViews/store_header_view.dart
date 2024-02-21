@@ -79,6 +79,7 @@ class StoreHeaderView extends StatelessWidget {
             ),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -108,6 +109,8 @@ class StoreHeaderView extends StatelessWidget {
                 thickness: 1,
               ),
               Wrap(
+                alignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.start,
                 children: [
                   Container(
                     margin: const EdgeInsets.all(15),

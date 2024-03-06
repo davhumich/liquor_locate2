@@ -13,9 +13,11 @@ import 'package:liquor_locate2/Functions/init_list_view.dart';
 
 // External packages from pub.dev
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 // Internal files located in this directory
 import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 // (ListView is already a flutter class, so we should use ListScreen as to not mix up the two)
 class ListScreen extends StatefulWidget {
@@ -27,6 +29,15 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreen extends State<ListScreen> {
   late List<String> storeIds;
+
+  final List<String> items = [
+    'Beer',
+    'Wine',
+    'Vodka',
+    'Whiskey',
+    'Seltzer',
+  ];
+  String? selectedValue;
 
   Future<String> storeInit() async {
     storeIds = await initListViewIds();
@@ -58,7 +69,7 @@ class _ListScreen extends State<ListScreen> {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     return Container(
-                        margin: const EdgeInsets.only(top: 70),
+                        margin: const EdgeInsets.only(top: 60),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -119,7 +130,43 @@ class _ListScreen extends State<ListScreen> {
 
           // This is the search bar, it is at the bottom so that it will be at the top of the
           // stack when the view loads, this way, when it expands it will be in front of the store views
-
+          DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          isExpanded: true,
+          hint: Text(
+            'What are you looking for...',
+            style: TextStyle(
+              fontSize: 18,
+              color: Theme.of(context).hintColor,
+            ),
+          ),
+          items: items
+              .map((String item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ))
+              .toList(),
+          value: selectedValue,
+          onChanged: (String? value) {
+            setState(() {
+              selectedValue = value;
+            });
+          },
+          buttonStyleData: ButtonStyleData(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            height: 60,
+            width: MediaQuery.of(context).size.width,
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+          ),
+        ),
+      ),
         ],
       ),
     );

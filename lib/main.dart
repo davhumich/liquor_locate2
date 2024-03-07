@@ -17,7 +17,6 @@ import 'package:liquor_locate2/firebase_options.dart';
 
 // External packages from pub.dev
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // Internal files located in this directory
 import 'package:liquor_locate2/MapView/map_view.dart';

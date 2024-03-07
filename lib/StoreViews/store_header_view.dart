@@ -135,7 +135,7 @@ class StoreHeaderView extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
               ),
               onPressed: () {
-                //openAppleMaps(store.location.latitude, store.location.longitude, store.name);
+                openAppleMaps(store.location.latitude, store.location.longitude, store.name);
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,

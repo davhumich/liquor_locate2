@@ -50,6 +50,9 @@ dependencies:
   shimmer: ^3.0.0
   easy_search_bar: ^2.5.0
   dropdown_button2: ^2.3.9
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.0
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   flutter_test:
@@ -75,9 +78,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - lib/assets/49602.jpeg
+  - lib/assets/Coronas.png
   - lib/assets/titos.png
+  - lib/assets/Barefoot.png
   - lib/assets/storeBackgroundImage.jpg
+  - lib/assets/fireball.png
+  - lib/assets/whiteClaw.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -90,7 +96,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: SFPro
+      fonts:
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Black.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Bold.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Heavy.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Light.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Medium.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Regular.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Semibold.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Thin.otf
+        - asset: lib/assets/Fonts/SF-Pro-Rounded-Ultralight.otf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

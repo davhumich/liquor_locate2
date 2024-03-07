@@ -12,17 +12,22 @@ import 'package:flutter/material.dart';
 
 // External packages from pub.dev
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
+import 'package:liquor_locate2/Functions/price_to_color.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
+import 'package:liquor_locate2/Functions/calculate_distance.dart';
 import 'package:liquor_locate2/Placeholder%20Skeletons/condensed_store_placeholder.dart';
 import 'package:liquor_locate2/StoreViews/expanded_store_view.dart';
 
 class CondensedStoreView extends StatefulWidget {
-  const CondensedStoreView({super.key, required this.storeId});
+  const CondensedStoreView({super.key, required this.storeId, required this.drinkId, required this.avgPrice});
 
   // These are the varibles we input to the view so it will load with different stores
   // (Eventually we will only input a store id and load it from the database directly from this view)
   final String storeId;
+  final String drinkId;
+  final double avgPrice;
 
   @override
   State<CondensedStoreView> createState() => _CondensedStoreView();
@@ -33,16 +38,27 @@ class _CondensedStoreView extends State<CondensedStoreView> {
   // (The reason they are late is because they are initialzed in initState, which is called after the widget loads)
   late String storeId;
   late Store store;
+  late String drinkId;
+  late double drinkPrice;
+  late double avgPrice;
+  late Color priceColor;
+
 
   // This function takes the variables inputed above and initialzes them in this state
   @override
   void initState() {
     super.initState();
     storeId = widget.storeId;
+    drinkId = widget.drinkId;
+    avgPrice = widget.avgPrice;
   }
+
+  
 
   Future<String> storeIdInit() async {
     store = await initStore(storeId);
+    drinkPrice = await initPrice(storeId, drinkId);
+    priceColor = priceToColor(drinkPrice, avgPrice);
     return 'Done';
   }
 
@@ -102,9 +118,26 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                   Expanded(
                     child: Text(store.name),
                   ),
-                  const Expanded(
-                    child: Text("0.6"),
-                  ),
+                  Expanded(
+                            child: FutureBuilder<String>(
+                              future: getDistance(store.location),
+                              builder: (context, distanceSnapshot) {
+                                if (distanceSnapshot.connectionState == ConnectionState.waiting) {
+                                  return const Text("Calculating distance...");
+                                } else if (distanceSnapshot.hasError) {
+                                  return Container(
+                                    width: 100,
+                                    child: Text('Error: ${distanceSnapshot.error}', softWrap: true, overflow: TextOverflow.ellipsis,),
+                                  );
+                                } else {
+                                  return Container(
+                                    width: 200,
+                                    child: Text(distanceSnapshot.data ?? 'Unknown distance', style: TextStyle(fontSize: 12), overflow: TextOverflow.ellipsis,),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
                   Expanded(
                     child: Row(
                       children: [
@@ -131,19 +164,12 @@ class _CondensedStoreView extends State<CondensedStoreView> {
               ),
             ),
             const Spacer(),
-            // Drink logo (Hard coded as titos for now, but will need to change)
-            Container(
-              width: 60,
-              height: 60,
-              padding: const EdgeInsets.only(right: 10),
-              child: const Image(image: AssetImage('lib/assets/titos.png')),
-            ),
             // Price
             Container(
               padding: const EdgeInsets.only(right: 10),
-              child: const Text(
-                "\$",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
+              child: Text(
+                "\$" + drinkPrice.toStringAsFixed(2),
+                style: TextStyle(fontSize: 18, color: priceColor),
               ),
             ),
           ],

@@ -24,6 +24,7 @@ import 'package:liquor_locate2/MapView/map_view.dart';
 import 'package:liquor_locate2/ProfileView/profile_view.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:geolocator/geolocator.dart';
 
 
 // Main function to run the application
@@ -50,7 +51,7 @@ class LiquorLocate extends StatelessWidget {
       ],
       // Theme data (if we want to change font or color scheme for entire app, this is where we do it)
       theme: ThemeData(
-        textTheme: GoogleFonts.kanitTextTheme(),
+        fontFamily: 'SFPro',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),

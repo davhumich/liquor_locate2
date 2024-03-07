@@ -7,6 +7,7 @@ View for the store header
 // Flutter tool packages
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liquor_locate2/Functions/open_maps.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
 
 class StoreHeaderView extends StatelessWidget {
@@ -138,7 +139,9 @@ class StoreHeaderView extends StatelessWidget {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
               ),
-              onPressed: () {},
+              onPressed: () {
+                //openAppleMaps(store.location.latitude, store.location.longitude, store.name);
+              },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

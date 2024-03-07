@@ -9,7 +9,11 @@ should take place in an external file
 
 // Flutter tool packages
 import 'package:flutter/material.dart';
+import 'package:liquor_locate2/Functions/calculate_average_price.dart';
+import 'package:liquor_locate2/Functions/drink_to_id.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:liquor_locate2/Functions/init_list_view.dart';
+import 'package:liquor_locate2/globals.dart';
 
 // External packages from pub.dev
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
@@ -17,7 +21,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 // Internal files located in this directory
 import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 // (ListView is already a flutter class, so we should use ListScreen as to not mix up the two)
 class ListScreen extends StatefulWidget {
@@ -37,10 +40,22 @@ class _ListScreen extends State<ListScreen> {
     'Whiskey',
     'Seltzer',
   ];
-  String? selectedValue;
+  String? selectedValue = "Beer";
+  late double avgPrice;
+  String drinkId = "13Dclb3TMT1SgvVhLvnc";
 
   Future<String> storeInit() async {
     storeIds = await initListViewIds();
+    avgPrice = await calculateAveragePrice(drinkId);
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever)
+    {
+        await Geolocator.requestPermission();
+    }
+    userLocation = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
     return 'Done';
   }
 
@@ -63,7 +78,7 @@ class _ListScreen extends State<ListScreen> {
               future: storeInit(),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text("loading...");
+                  return const SizedBox();
                 } else {
                   if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
@@ -78,35 +93,140 @@ class _ListScreen extends State<ListScreen> {
                                 clipper: WaveClipperOne(flip: true),
                                 child: Container(
                                   padding: const EdgeInsets.only(
-                                      bottom: 40, left: 35, right: 10, top: 10),
-                                  height: 100,
+                                      bottom: 40, left: 20, right: 10, top: 10),
+                                  height: 130,
                                   color:
                                       const Color.fromARGB(255, 255, 231, 231),
                                   child: Row(
                                     children: [
-                                      const Image(
-                                          image: AssetImage(
-                                              'lib/assets/titos.png')),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      const Text(
-                                        "Fifth of Titos",
-                                        style: TextStyle(fontSize: 20),
-                                      ),
+                                      if (selectedValue == "Beer")
+                                        const Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40,
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'lib/assets/Coronas.png')),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 170,
+                                              child: Text(
+                                                "6 Pack of Corona",
+                                                maxLines: 2,
+                                                style: TextStyle(fontSize: 22),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      if (selectedValue == "Wine")
+                                        const Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40,
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'lib/assets/Barefoot.png')),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 170,
+                                              child: Text(
+                                                "Bottle of Barefoot",
+                                                maxLines: 2,
+                                                style: TextStyle(fontSize: 22),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      if (selectedValue == "Vodka")
+                                        const Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40,
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'lib/assets/titos.png')),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 170,
+                                              child: Text(
+                                                "Fifth of Titos",
+                                                maxLines: 2,
+                                                style: TextStyle(fontSize: 22),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      if (selectedValue == "Whiskey")
+                                        const Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40,
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'lib/assets/fireball.png')),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 170,
+                                              child: Text(
+                                                "Fifth of Fireball",
+                                                maxLines: 2,
+                                                style: TextStyle(fontSize: 22),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      if (selectedValue == "Seltzer")
+                                        const Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 40,
+                                              child: Image(
+                                                  image: AssetImage(
+                                                      'lib/assets/whiteClaw.png')),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 170,
+                                              child: Text(
+                                                "6 Pack of White Claws",
+                                                maxLines: 2,
+                                                style: TextStyle(fontSize: 22),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       const Spacer(),
-                                      const Text(
-                                        "Avg:     ",
-                                        style: TextStyle(fontSize: 20),
+                                      Column(
+                                        children: [
+                                          const Text(
+                                        "Avg:  ",
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       Container(
                                         padding:
-                                            const EdgeInsets.only(right: 10),
-                                        child: const Text("\$16.01",
+                                            const EdgeInsets.only(right: 20),
+                                        child: Text("\$" + avgPrice.toStringAsFixed(2),
                                             style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 22,
                                             )),
                                       ),
+
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
@@ -116,9 +236,10 @@ class _ListScreen extends State<ListScreen> {
                                 Column(
                                   children: [
                                     CondensedStoreView(
-                                      storeId: storeId,
+                                        storeId: storeId, drinkId: drinkId, avgPrice: avgPrice,),
+                                    const Divider(
+                                      height: 1,
                                     ),
-                                    const Divider(height: 1,),
                                   ],
                                 )
                             ],
@@ -131,42 +252,43 @@ class _ListScreen extends State<ListScreen> {
           // This is the search bar, it is at the bottom so that it will be at the top of the
           // stack when the view loads, this way, when it expands it will be in front of the store views
           DropdownButtonHideUnderline(
-        child: DropdownButton2<String>(
-          isExpanded: true,
-          hint: Text(
-            'What are you looking for...',
-            style: TextStyle(
-              fontSize: 18,
-              color: Theme.of(context).hintColor,
+            child: DropdownButton2<String>(
+              isExpanded: true,
+              hint: Text(
+                'What are you looking for...',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+              items: items
+                  .map((String item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ))
+                  .toList(),
+              value: selectedValue,
+              onChanged: (String? value) {
+                setState(() {
+                  selectedValue = value;
+                  drinkId = drinkToId(value!);
+                });
+              },
+              buttonStyleData: ButtonStyleData(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                height: 40,
+              ),
             ),
           ),
-          items: items
-              .map((String item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ))
-              .toList(),
-          value: selectedValue,
-          onChanged: (String? value) {
-            setState(() {
-              selectedValue = value;
-            });
-          },
-          buttonStyleData: ButtonStyleData(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            height: 60,
-            width: MediaQuery.of(context).size.width,
-          ),
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
-        ),
-      ),
         ],
       ),
     );

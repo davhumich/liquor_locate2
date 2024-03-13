@@ -9,7 +9,7 @@ and the more detailed store view loads
 
 // Flutter tool packages
 import 'package:flutter/material.dart';
-import 'package:liquor_locate2/Functions/init_drinks.dart';
+import 'package:liquor_locate2/Functions/init_drink.dart';
 import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
@@ -97,17 +97,11 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
                       double price = snapshot.data!;
                       return ListTile(
                         title: Text('${drink.size} of ${drink.name}'),
-                        subtitle: Text('\$$price'),
-                        trailing: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 40, 
-                          child: ClipOval(
-                            child: Image.asset(
+                        subtitle: Text("\$${price.toStringAsFixed(2)}", style: TextStyle(fontSize: 14),),
+                        trailing: Image.asset(
                               drink.img,
                               fit: BoxFit.cover,
                             ),
-                          ),
-                        ),
                       );
                     }
                   },

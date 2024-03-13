@@ -77,39 +77,13 @@ class StoreHeaderView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(15),
-                    child: RatingBarIndicator(
-                      rating: store.rating,
-                      itemBuilder: (context, index) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      itemCount: 5,
-                      itemSize: 16,
-                    ),
-                  ),
-                  Text(
-                    store.rating.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(
-                height: 1,
-                thickness: 1,
-              ),
+
               Wrap(
                 alignment: WrapAlignment.start,
                 crossAxisAlignment: WrapCrossAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.only(top:15, left:15, right:15, bottom: 5),
                     child: Text(
                       store.address,
                       style: const TextStyle(
@@ -119,9 +93,37 @@ class StoreHeaderView extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(
-                height: 1,
-                thickness: 1,
+              // const Divider(
+              //   height: 1,
+              //   thickness: 1,
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left:15, bottom: 15),
+                    child: RatingBarIndicator(
+                      rating: store.rating,
+                      itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      itemCount: 5,
+                      itemSize: 18,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left:5, bottom: 13),
+                    child: Text(
+                    store.rating.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600
+                    ),
+                  ),
+                  )
+                  
+                ],
               ),
             ],
           ),

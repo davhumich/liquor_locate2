@@ -85,6 +85,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                       // Const for now, will enevtually need to input the store id, so it can load the actual store data
                       builder: (BuildContext context) => ExpandedStoreView(
                         storeId: storeId,
+                        storeName: store.name,
                       ),
                     ),
                   );
@@ -93,6 +94,25 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                   // This is the outside container used to contain the view
                   height: 98,
                   padding: const EdgeInsets.all(10),
+                  margin: EdgeInsets.all(10),
+                  
+                  decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(1, 1), // changes position of shadow
+                    ),
+                  ],
+                ),
                   child: Row(
                     children: [
                       Padding(

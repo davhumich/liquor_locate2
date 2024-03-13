@@ -65,12 +65,6 @@ class _CondensedStoreView extends State<CondensedStorePlaceholder> {
             ),
             const Spacer(),
             // Drink logo (Hard coded as titos for now, but will need to change)
-            Container(
-              width: 60,
-              height: 60,
-              padding: const EdgeInsets.only(right: 10),
-              child: const Image(image: AssetImage('lib/assets/titos.png')),
-            ),
             // Price
             Container(
               padding: const EdgeInsets.only(right: 10),

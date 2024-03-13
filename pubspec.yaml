@@ -108,6 +108,11 @@ flutter:
         - asset: lib/assets/Fonts/SF-Pro-Rounded-Semibold.otf
         - asset: lib/assets/Fonts/SF-Pro-Rounded-Thin.otf
         - asset: lib/assets/Fonts/SF-Pro-Rounded-Ultralight.otf
+        - asset: lib/assets/championsBG.jpg
+        - asset: lib/assets/mainStreetPartyBG.jpg
+        - asset: lib/assets/stadiumMarketBG.jpg
+        - asset: lib/assets/stricklandsBG.jpg
+        - asset: lib/assets/totalWineBG.jpg
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

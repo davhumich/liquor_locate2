@@ -87,7 +87,7 @@ class _ListScreen extends State<ListScreen> {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     return Container(
-                        margin: const EdgeInsets.only(top: 60),
+                        margin: const EdgeInsets.only(top: 80),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -227,7 +227,6 @@ class _ListScreen extends State<ListScreen> {
                                               fontSize: 22,
                                             )),
                                       ),
-
                                         ],
                                       )
                                     ],
@@ -240,9 +239,6 @@ class _ListScreen extends State<ListScreen> {
                                   children: [
                                     CondensedStoreView(
                                         storeId: storeId, drinkId: drinkId, avgPrice: avgPrice,),
-                                    const Divider(
-                                      height: 1,
-                                    ),
                                   ],
                                 )
                             ],
@@ -254,10 +250,31 @@ class _ListScreen extends State<ListScreen> {
 
           // This is the search bar, it is at the bottom so that it will be at the top of the
           // stack when the view loads, this way, when it expands it will be in front of the store views
-          Row(
+          Container(
+            color:
+                                      const Color.fromARGB(255, 255, 231, 231),
+            child: Row(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width - 50,
+                margin: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                width: MediaQuery.of(context).size.width - 80,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(1, 1), // changes position of shadow
+                    ),
+                  ],
+                ),
                 child:DropdownButtonHideUnderline(
                 
             child: DropdownButton2<String>(
@@ -298,8 +315,26 @@ class _ListScreen extends State<ListScreen> {
             ),
           ) ,
               ),
-              
-          PopupMenuButton(
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(1, 1), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: PopupMenuButton(
             shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))
       ),
@@ -342,9 +377,13 @@ class _ListScreen extends State<ListScreen> {
                   },);
                 }
               }),
+              )
+          
 
             ],
+          ),
           )
+          
           
         ],
       ),

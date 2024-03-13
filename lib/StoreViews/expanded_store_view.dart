@@ -16,8 +16,9 @@ import 'package:liquor_locate2/StoreViews/store_header_view.dart';
 
 // (Stateful widget because eventually the data will need to chnage based on what store is being loaded)
 class ExpandedStoreView extends StatefulWidget {
-  const ExpandedStoreView({super.key, required this.storeId});
+  const ExpandedStoreView({super.key, required this.storeId, required this.storeName});
   final String storeId;
+  final String storeName;
 
   @override
   State<ExpandedStoreView> createState() => _ExpandedStoreView();
@@ -26,11 +27,13 @@ class ExpandedStoreView extends StatefulWidget {
 class _ExpandedStoreView extends State<ExpandedStoreView> {
   late Store store;
   late String storeId;
+  late String storeName;
 
 @override
   void initState() {
     super.initState();
     storeId = widget.storeId;
+    storeName = widget.storeName;
   }
 
   Future<String> storeInit() async {
@@ -43,8 +46,8 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "",
+        title: Text(
+          storeName,
           style: TextStyle(color: Colors.white),
         ),
         elevation: 3,

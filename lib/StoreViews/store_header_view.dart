@@ -8,6 +8,7 @@ View for the store header
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:liquor_locate2/Functions/open_maps.dart';
+import 'package:liquor_locate2/Functions/store_to_header_image.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
 
 class StoreHeaderView extends StatelessWidget {
@@ -27,9 +28,9 @@ class StoreHeaderView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 20),
                   alignment: Alignment.topCenter,
                   decoration: BoxDecoration(
-                    image: const DecorationImage(
+                    image: DecorationImage(
                         image:
-                            AssetImage("lib/assets/storeBackgroundImage.jpg"),
+                            storeToHeaderImage(store.id),
                         fit: BoxFit.fitWidth),
                     boxShadow: [
                       BoxShadow(
@@ -43,12 +44,6 @@ class StoreHeaderView extends StatelessWidget {
                   ),
                   child: Container(
                     padding: const EdgeInsets.all(3),
-                    child: Text(
-                      store.name,
-                      style: const TextStyle(
-                          fontSize: 30,
-                          color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
                   )),
               Align(
                 alignment: const FractionalOffset(0.5, 2.4),

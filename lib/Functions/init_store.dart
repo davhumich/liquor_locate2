@@ -13,7 +13,7 @@ Future<Store> initStore (String storeId) async {
 
         if (storeSnapshot.exists){
           String logoString = "";
-
+            store.id = storeSnapshot.id;
             store.name = storeSnapshot['Name'];
             store.rating = storeSnapshot["StarRating"];
             store.address = storeSnapshot["Address"];

@@ -74,7 +74,7 @@ class _TabViewState extends State<TabView> {
 
   // The controller to manage everything involved with the TabView
   final PersistentTabController _controller =
-      PersistentTabController(initialIndex: 0);
+      PersistentTabController(initialIndex: 1);
 
   @override
   Widget build(BuildContext context) {

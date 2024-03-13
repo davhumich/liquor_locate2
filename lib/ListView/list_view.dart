@@ -44,9 +44,9 @@ class _ListScreen extends State<ListScreen> {
   late double avgPrice;
   String drinkId = "13Dclb3TMT1SgvVhLvnc";
 
+  String sortBy = "Distance";
+
   Future<String> storeInit() async {
-    storeIds = await initListViewIds();
-    avgPrice = await calculateAveragePrice(drinkId);
     LocationPermission permission = await Geolocator.checkPermission();
 
     if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever)
@@ -56,6 +56,9 @@ class _ListScreen extends State<ListScreen> {
     userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.best,
     );
+      storeIds = await initListViewIds(sortBy, drinkId);
+    avgPrice = await calculateAveragePrice(drinkId);
+    
     return 'Done';
   }
 
@@ -251,7 +254,12 @@ class _ListScreen extends State<ListScreen> {
 
           // This is the search bar, it is at the bottom so that it will be at the top of the
           // stack when the view loads, this way, when it expands it will be in front of the store views
-          DropdownButtonHideUnderline(
+          Row(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width - 50,
+                child:DropdownButtonHideUnderline(
+                
             child: DropdownButton2<String>(
               isExpanded: true,
               hint: Text(
@@ -288,7 +296,56 @@ class _ListScreen extends State<ListScreen> {
                 height: 40,
               ),
             ),
-          ),
+          ) ,
+              ),
+              
+          PopupMenuButton(
+            shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))
+      ),
+              icon: const Icon(Icons.sort),
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem<int>(
+                    value: 0,
+                    child: SizedBox(
+                      width: 140,
+                      child: Text("Sort by Distance", style: TextStyle(fontSize: 15),),
+                    )
+                    
+                  ),
+                  const PopupMenuItem<int>(
+                    padding: EdgeInsets.all(0),
+                    height: 1,
+                    value: 2,
+                    child: Divider(height: 1,),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: SizedBox(
+                      width: 140,
+                      child: Text("Sort by Price", style: TextStyle(fontSize: 15),),
+                    )
+                    
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 0) {
+                  setState(() {
+                    sortBy = "Distance";
+                  },);
+                }
+                if (value == 1) {
+                  setState(() {
+                    sortBy = "Price";
+                  },);
+                }
+              }),
+
+            ],
+          )
+          
         ],
       ),
     );

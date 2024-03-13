@@ -44,7 +44,7 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Expanded Store View",
+          "",
           style: TextStyle(color: Colors.white),
         ),
         elevation: 3,

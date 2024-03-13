@@ -9,8 +9,11 @@ and the more detailed store view loads
 
 // Flutter tool packages
 import 'package:flutter/material.dart';
+import 'package:liquor_locate2/Functions/init_drinks.dart';
+import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
+import 'package:liquor_locate2/Models/drink_model.dart';
 import 'package:liquor_locate2/Placeholder%20Skeletons/store_header_placeholder.dart';
 import 'package:liquor_locate2/StoreViews/store_header_view.dart';
 
@@ -27,6 +30,7 @@ class ExpandedStoreView extends StatefulWidget {
 class _ExpandedStoreView extends State<ExpandedStoreView> {
   late Store store;
   late String storeId;
+  late List<Drink> drinks;
   late String storeName;
 
 @override
@@ -38,6 +42,7 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
 
   Future<String> storeInit() async {
     store = await initStore(storeId);
+    drinks = await initDrinks();
     return 'Done';
   }
 
@@ -69,7 +74,48 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
                 return Column(
                   children: [
                     StoreHeaderView(store: store),
-                  ],
+                    Expanded(
+            child: ListView.builder(
+              itemCount: drinks.length,
+              itemBuilder: (BuildContext context, int index) {
+                // Display each drink
+                Drink drink = drinks[index];
+                return FutureBuilder<double>(
+                  future: initPrice(storeId, drink.id),
+                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return ListTile(
+                        title: Text('${drink.size} of ${drink.name}'),
+                        subtitle: Text('Loading...'),
+                      );
+                    } else if (snapshot.hasError) {
+                      return ListTile(
+                        title: Text('${drink.size} of ${drink.name}'),
+                        subtitle: Text('Error: ${snapshot.error}'),
+                      );
+                    } else {
+                      double price = snapshot.data!;
+                      return ListTile(
+                        title: Text('${drink.size} of ${drink.name}'),
+                        subtitle: Text('\$$price'),
+                        trailing: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 40, 
+                          child: ClipOval(
+                            child: Image.asset(
+                              drink.img,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                );
+              },
+            )
+              
+                )],
                 );
               }
             }
@@ -77,3 +123,8 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
     );
   }
 }
+
+
+
+
+

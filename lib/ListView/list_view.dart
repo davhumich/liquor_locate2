@@ -205,7 +205,7 @@ class _ListScreen extends State<ListScreen> {
                                             SizedBox(
                                               width: 170,
                                               child: Text(
-                                                "6 Pack of White Claws",
+                                                "12 Pack of White Claws",
                                                 maxLines: 2,
                                                 style: TextStyle(fontSize: 22),
                                               ),

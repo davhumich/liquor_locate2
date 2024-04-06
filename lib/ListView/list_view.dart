@@ -222,8 +222,8 @@ class _ListScreen extends State<ListScreen> {
                                       Container(
                                         padding:
                                             const EdgeInsets.only(right: 20),
-                                        child: Text("\$" + avgPrice.toStringAsFixed(2),
-                                            style: TextStyle(
+                                        child: Text("\$${avgPrice.toStringAsFixed(2)}",
+                                            style: const TextStyle(
                                               fontSize: 22,
                                             )),
                                       ),
@@ -256,7 +256,7 @@ class _ListScreen extends State<ListScreen> {
             child: Row(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                margin: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
                 width: MediaQuery.of(context).size.width - 80,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -316,7 +316,7 @@ class _ListScreen extends State<ListScreen> {
           ) ,
               ),
               Container(
-                margin: EdgeInsets.only(left: 10),
+                margin: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: const BorderRadius.only(

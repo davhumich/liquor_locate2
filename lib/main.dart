@@ -23,7 +23,6 @@ import 'package:liquor_locate2/MapView/map_view.dart';
 import 'package:liquor_locate2/ProfileView/profile_view.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:geolocator/geolocator.dart';
 
 
 // Main function to run the application
@@ -81,10 +80,10 @@ class _TabViewState extends State<TabView> {
       context,
       hideNavigationBarWhenKeyboardShows: true,
       controller: _controller,
-      screens: const [
-        MapView(),
-        ListScreen(),
-        ProfileView(),
+      screens: [
+        const MapView(),
+        const ListScreen(),
+        ProfileView(userId: '', profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
       ],
       items: _navBarsItems(), // Referenced below
       navBarStyle: NavBarStyle.style1,

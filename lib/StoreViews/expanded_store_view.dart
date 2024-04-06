@@ -53,7 +53,7 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
       appBar: AppBar(
         title: Text(
           storeName,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         elevation: 3,
         backgroundColor: const Color.fromARGB(255, 236, 87, 95),
@@ -86,7 +86,7 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return ListTile(
                         title: Text('${drink.size} of ${drink.name}'),
-                        subtitle: Text('Loading...'),
+                        subtitle: const Text('Loading...'),
                       );
                     } else if (snapshot.hasError) {
                       return ListTile(
@@ -97,7 +97,7 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
                       double price = snapshot.data!;
                       return ListTile(
                         title: Text('${drink.size} of ${drink.name}'),
-                        subtitle: Text("\$${price.toStringAsFixed(2)}", style: TextStyle(fontSize: 14),),
+                        subtitle: Text("\$${price.toStringAsFixed(2)}", style: const TextStyle(fontSize: 14),),
                         trailing: Image.asset(
                               drink.img,
                               fit: BoxFit.cover,

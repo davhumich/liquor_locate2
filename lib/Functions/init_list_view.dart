@@ -27,7 +27,7 @@ Future<List<String>> sortByDistance(List<String> storeIds) async{
   QuerySnapshot querySnapshot = await storesCollection.get();
   Map<String, double> storeDistances = {};
 
-  querySnapshot.docs.forEach((DocumentSnapshot document) {
+  for (var document in querySnapshot.docs) {
     if (document.exists) {
       String storeId = document.id;
       if (storeIds.contains(storeId)){
@@ -36,7 +36,7 @@ Future<List<String>> sortByDistance(List<String> storeIds) async{
         storeDistances[storeId] = distance;
       }
     }
-  });
+  }
 
   List<MapEntry<String, double>> distanceList = storeDistances.entries.toList();
   distanceList.sort((a, b) => a.value.compareTo(b.value));
@@ -51,7 +51,7 @@ Future<List<String>> sortByPrice(List<String> storeIds, String drinkId) async{
   QuerySnapshot querySnapshot = await storesCollection.get();
   Map<String, double> storePrices = {};
 
-  querySnapshot.docs.forEach((DocumentSnapshot document) {
+  for (var document in querySnapshot.docs) {
     if (document.exists) {
       String storeId = document["storeId"];
       if (storeIds.contains(storeId)){
@@ -59,7 +59,7 @@ Future<List<String>> sortByPrice(List<String> storeIds, String drinkId) async{
         storePrices[storeId] = price;
       }
     }
-  });
+  }
 
   List<MapEntry<String, double>> distanceList = storePrices.entries.toList();
   distanceList.sort((a, b) => a.value.compareTo(b.value));

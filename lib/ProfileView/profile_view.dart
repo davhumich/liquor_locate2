@@ -1,152 +1,254 @@
 /*
 
-profile_view.dart
-
-This is the view for the profile tab, will be static to start, 
-but once database initialized, should change by user.
+View to display the settings
 
 */
 
-// Flutter tool packages
+//Internal Files
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
+
+//External Packages
 import 'package:flutter/material.dart';
 
-// (Stateful widget because eventually the data will need to chnage based on what user is signed in)
-class ProfileView extends StatefulWidget {
-  const ProfileView({super.key});
+//Firebase Packages
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:liquor_locate2/ProfileView/placeholder.dart';
 
-  @override
-  State<ProfileView> createState() => _ProfileView();
-}
+// ignore: must_be_immutable
+class ProfileView extends StatelessWidget {
+  ProfileView(
+      {Key? key,
+      required this.userId,
+      required this.profilePic,
+      required this.headerImage,
+      required this.username,
+      required this.firstName,
+      required this.lastName})
+      : super(key: key);
+  final String username;
+  final String userId;
+  final AssetImage profilePic;
+  final AssetImage headerImage;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final String firstName;
+  final String lastName;
 
-class _ProfileView extends State<ProfileView> {
-  // This is the actual widget that creates the interface
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Profile View",
-            style: TextStyle(color: Colors.white),
-          ),
-          elevation: 3,
-          backgroundColor: const Color.fromARGB(255, 236, 87, 95),
+      appBar: AppBar(
+        title: const Text(
+          "Profile",
+          style: TextStyle(color: Colors.white),
         ),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const SizedBox(height: 50),
-
-            Row(children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey[
-                      300], 
-                  child: Icon(
-                    Icons.person,
-                    size: 50,
-                    color: Colors.grey[600],
+        elevation: 3,
+        backgroundColor: const Color.fromARGB(255, 236, 87, 95),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        margin: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 110,
+              height: 110,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                    color: const Color.fromARGB(255, 170, 164, 164), width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0.5,
+                    blurRadius: 1,
+                    offset: const Offset(0, 1), // changes position of shadow
                   ),
+                ],
+              ),
+              child: ClipOval(
+                child: SizedBox.fromSize(
+                  size: const Size.fromRadius(48), // Image radius
+                  child: Image(image: profilePic),
                 ),
               ),
-              const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      height: 20,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'First Name',
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10, top: 10),
+              child: Text(
+                username,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              width: 400,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const GreenFrog(),
                         ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 170, 164, 164),
+                            width: 0.1),
+                        color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 61, 61, 61) : Colors.white,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        boxShadow: [
+                          if (SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.light)
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 0.5,
+                            blurRadius: 1,
+                            offset: const Offset(
+                                0, 1), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(CupertinoIcons.pencil),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Edit Profile",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
                     ),
-
-                    SizedBox(height: 10), // Empty Space
-
-                    SizedBox(
-                      width: 200,
-                      height: 20,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Last Name',
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 170, 164, 164),
+                          width: 0.1),
+                      color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 61, 61, 61) : Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        if (SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.light)
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0.5,
+                          blurRadius: 1,
+                          offset:
+                              const Offset(0, 1), // changes position of shadow
                         ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const GreenFrog()
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.close,
+                            color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 202, 72, 63) : const Color.fromARGB(255, 153, 42, 35),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Delete Account",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 221, 89, 79) : const Color.fromARGB(255, 153, 42, 35),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-
-                    SizedBox(height: 10), // Empty Space
-
-                    SizedBox(
-                      width: 200,
-                      height: 20,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Email',
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 170, 164, 164),
+                          width: 0.1),
+                      color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 61, 61, 61) : Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        if (SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.light)
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0.5,
+                          blurRadius: 1,
+                          offset:
+                              const Offset(0, 1), // changes position of shadow
                         ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        auth.signOut();
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 123, 186, 237) :const Color.fromARGB(255, 20, 90, 147),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Logout",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? const Color.fromARGB(255, 123, 186, 237) :const Color.fromARGB(255, 20, 90, 147),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ])
-            ]),
-            // Profile Picture
-
-            const SizedBox(height: 80), // Empty Space
-
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement Log Out functionality
-                    // You can handle log out logic here
-                  },
-                  // style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.yellow)),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 20), // Adjust padding for size
-                  ),
-                  child: const Text('Edit Profile',
-                      style: TextStyle(color: Colors.red)),
-                ),
-
-                const SizedBox(height: 10), // Empty Space
-
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement Log Out functionality
-                    // You can handle log out logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 20), // Adjust padding for size
-                  ),
-                  child: const Text('Settings',
-                      style: TextStyle(color: Colors.red)),
-                ),
-
-                const SizedBox(height: 10), // Empty Space
-
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Settings screen
-                    // You can implement the navigation logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 20), // Adjust padding for size
-                  ),
-                  child: const Text('Log Out',
-                      style: TextStyle(color: Colors.red)),
-                ),
-              ],
-            )
-          ]),
-        ));
+                  )
+                ],
+              ),
+            ),
+            const Spacer(),
+          ],
+        ),
+      ),
+    );
   }
 }

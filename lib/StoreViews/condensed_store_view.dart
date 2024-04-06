@@ -94,7 +94,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                   // This is the outside container used to contain the view
                   height: 98,
                   padding: const EdgeInsets.all(10),
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   
                   decoration: BoxDecoration(
                   color: Colors.white,
@@ -140,7 +140,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Text(store.name, style: TextStyle(fontSize: 16),),
+                              child: Text(store.name, style: const TextStyle(fontSize: 16),),
                             ),
                             Expanded(
                               child: FutureBuilder<String>(
@@ -151,7 +151,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                                     return const Text(
                                         "Calculating distance...");
                                   } else if (distanceSnapshot.hasError) {
-                                    return Container(
+                                    return SizedBox(
                                       width: 100,
                                       child: Text(
                                         'Error: ${distanceSnapshot.error}',
@@ -161,12 +161,12 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                                     );
                                   } else {
                                     return Container(
-                                      padding: EdgeInsets.only(top: 2),
+                                      padding: const EdgeInsets.only(top: 2),
                                       width: 200,
                                       child: Text(
                                         distanceSnapshot.data ??
                                             'Unknown distance',
-                                        style: TextStyle(fontSize: 14),
+                                        style: const TextStyle(fontSize: 14),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     );
@@ -204,7 +204,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                       Container(
                         padding: const EdgeInsets.only(right: 10),
                         child: Text(
-                          "\$" + drinkPrice.toStringAsFixed(2),
+                          "\$${drinkPrice.toStringAsFixed(2)}",
                           style: TextStyle(fontSize: 18, color: priceColor),
                         ),
                       ),

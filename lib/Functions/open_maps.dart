@@ -12,7 +12,7 @@ void openAppleMaps(double latitude, double longitude, String storeName) async {
   } else {
     // All other stores queried exactly to store, not just long,lat
     url = Uri.https('maps.apple.com', '',
-        {'q': '$storeName', 'sll': '$latitude,$longitude'});
+        {'q': storeName, 'sll': '$latitude,$longitude'});
   }
 
   if (await canLaunchUrl(url)) {

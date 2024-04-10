@@ -67,6 +67,9 @@ class _CondensedStoreView extends State<CondensedStoreView> {
   Widget build(BuildContext context) {
     // This InkWell object makes it so when the user taps on this view,
     // they will be taken to the expanded store view
+    storeId = widget.storeId;
+    drinkId = widget.drinkId;
+    avgPrice = widget.avgPrice;
     return FutureBuilder(
         future: storeIdInit(),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -201,6 +204,7 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                       ),
                       const Spacer(),
                       // Price
+                      if (avgPrice > 0)
                       Container(
                         padding: const EdgeInsets.only(right: 10),
                         child: Text(

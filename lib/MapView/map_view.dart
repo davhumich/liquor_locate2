@@ -8,14 +8,21 @@ has a lot of google maps stuff, so looks more complicated than it is.
 */
 
 // Flutter tool packages
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // External packages from pub.dev
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:liquor_locate2/Functions/calculate_average_price.dart';
+import 'package:liquor_locate2/Functions/drink_to_id.dart';
+import 'package:search_map_location/search_map_location.dart';
 
 // Internal files located in this directory
 import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
+import 'package:liquor_locate2/globals.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -33,12 +40,93 @@ class _MapView extends State<MapView> {
 
   // Controller for editing the text in the search bar
   TextEditingController textController = TextEditingController();
+ 
+  Set<Marker> markers = {}; // Updated to store markers dynamically
 
-  // This is a function for if we want to initialize anything on the map when it is created
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  LatLng userLatLng = LatLng(userLocation.latitude, userLocation.longitude);
+
+  Marker? selectedMarker;
+
+  String SelectedStore = "blank";
+
+  final List<String> items = [
+    'Beer',
+    'Wine',
+    'Vodka',
+    'Whiskey',
+    'Seltzer',
+  ];
+  String? selectedValue = "Beer";
+  double avgPrice = -1;
+  String drinkId = "13Dclb3TMT1SgvVhLvnc";
+
+  void _onMapTapped(LatLng latLng) {
+    setState(() {
+      selectedMarker = null;
+      SelectedStore = "blank";
+    });
   }
 
+  void _onMarkerTapped(Marker marker) {
+    setState(() {
+      if (selectedMarker != marker)
+       { 
+        selectedMarker = marker;
+        SelectedStore = marker.markerId.value;
+       }
+      else {
+      selectedMarker = null;
+      SelectedStore = "blank";
+      }
+    });
+    print(selectedMarker);
+  }
+
+
+  // This is a function for if we want to initialize anything on the map when it is created
+  void _onMapCreated(GoogleMapController controller) async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever)
+    {
+        await Geolocator.requestPermission();
+    }
+    userLocation = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+    userLatLng = LatLng(userLocation.latitude, userLocation.longitude);
+    mapController = controller;
+    await _fetchMarkersFromFirestore();
+
+    mapController.animateCamera(CameraUpdate.newLatLngZoom(userLatLng!, 14.0));
+    
+  }
+
+  Future<void> _fetchMarkersFromFirestore() async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('stores').get();
+    setState(() {
+      markers.clear();
+    });
+    
+    // Iterate through the documents and add markers
+    snapshot.docs.forEach((DocumentSnapshot document) {
+      if (document.exists) {
+        GeoPoint geoPoint = document["StorePosition"];
+        LatLng storeLocation = LatLng(geoPoint.latitude, geoPoint.longitude);
+
+        Marker marker = Marker(
+          markerId: MarkerId(document.id),
+          position: storeLocation,
+          onTap: () => _onMarkerTapped(Marker(markerId: MarkerId(document.id), position: storeLocation)),
+          infoWindow: InfoWindow(title: document["Name"])
+        );
+
+        setState(() {
+          markers.add(marker);
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,43 +145,50 @@ class _MapView extends State<MapView> {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 325,
+                height: MediaQuery.of(context).size.height - 305,
                 // This is the GoogleMap widget, everything is manged by
                 // Google's API so we only need to import this widget
                 child: GoogleMap(
                   // Right now the markers are static but everntually they will be created dynamically
-                  markers: {
-                    const Marker(
-                        markerId: MarkerId("id1"),
-                        position:
-                            LatLng(42.261240502744414, -83.73059051035652)),
-                    const Marker(
-                        markerId: MarkerId("id2"),
-                        position:
-                            LatLng(42.27123967529914, -83.73975634176435)),
-                    const Marker(
-                        markerId: MarkerId("id3"),
-                        position:
-                            LatLng(42.258599513621036, -83.73739599788769))
-                  },
+                  myLocationEnabled: true,
+                  onTap: _onMapTapped,
+                  markers: markers,
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
-                    target: _initialLatLng,
+                    target: userLatLng ?? _initialLatLng,
                     zoom: 12.5,
                   ),
                 ),
               ),
               // Search bar, doesn't do anything right now
-              Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: AnimSearchBar(
-                  onSubmitted: (value) {},
-                  width: 400,
-                  textController: textController,
-                  onSuffixTap: () {
-                    setState(() {
-                      textController.clear();
-                    });
+             Positioned(
+                top: 16.0,
+                left: 16.0,
+                right: 16.0,
+                child: SearchLocation(
+                  apiKey: 'AIzaSyCsHkeL1M3Nx6-yoheQ9x7_qbQp0qp5XCs',
+                  onSelected: (place) async {
+                    bool inDB = false;
+                    print("here");
+                    final geolocation = await place.geolocation;
+                    print(geolocation);
+                    LatLng searchCoordinates = LatLng(geolocation!.coordinates.latitude, geolocation!.coordinates.longitude);
+                    print(searchCoordinates.latitude);
+                    print(searchCoordinates.longitude);
+                    markers.forEach((marker) {
+                      if(marker.position.latitude == geolocation!.coordinates.latitude && marker.position.longitude == geolocation!.coordinates.longitude)
+                      {
+                        inDB = true;
+                        setState(() {
+                          selectedMarker = marker;
+                          SelectedStore = marker.markerId.value;
+                        });
+                      }
+                     });
+                    if(!inDB)
+                    {
+                      _onMapTapped(searchCoordinates);
+                    }
                   },
                 ),
               ),
@@ -101,14 +196,20 @@ class _MapView extends State<MapView> {
           ),
           // This is the bottom store view, right now static,
           // but eventually will change when user clicks on marker
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color.fromARGB(255, 95, 95, 95), width: 0.4),
-            ),
-            child: const CondensedStoreView(storeId: "4jzwzudEmlcNbTQMR2Sl", drinkId: '13Dclb3TMT1SgvVhLvnc', avgPrice: 10,),
-          )
+          if (SelectedStore != "blank")
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color.fromARGB(255, 95, 95, 95)),
+              ),
+              child: CondensedStoreView(
+                storeId: SelectedStore,
+                drinkId: drinkId,
+                avgPrice: 0,
+              ),
+            )
         ],
       ),
     );
   }
 }
+

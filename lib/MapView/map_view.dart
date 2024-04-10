@@ -25,13 +25,23 @@ import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
 import 'package:liquor_locate2/globals.dart';
 
 class MapView extends StatefulWidget {
-  const MapView({super.key});
+  const MapView({super.key, required this.userId});
+  final String userId;
 
   @override
   State<MapView> createState() => _MapView();
 }
 
 class _MapView extends State<MapView> {
+  late String userId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userId = widget.userId;
+  }
+
   // This is the map controller so the user can interact with the map
   late GoogleMapController mapController;
 
@@ -204,7 +214,7 @@ class _MapView extends State<MapView> {
               child: CondensedStoreView(
                 storeId: SelectedStore,
                 drinkId: drinkId,
-                avgPrice: 0,
+                avgPrice: 0, userId: userId,
               ),
             )
         ],

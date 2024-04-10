@@ -25,13 +25,14 @@ class CondensedStoreView extends StatefulWidget {
       {super.key,
       required this.storeId,
       required this.drinkId,
-      required this.avgPrice});
+      required this.avgPrice, required this.userId});
 
   // These are the varibles we input to the view so it will load with different stores
   // (Eventually we will only input a store id and load it from the database directly from this view)
   final String storeId;
   final String drinkId;
   final double avgPrice;
+  final String userId;
 
   @override
   State<CondensedStoreView> createState() => _CondensedStoreView();
@@ -47,6 +48,8 @@ class _CondensedStoreView extends State<CondensedStoreView> {
   late double avgPrice;
   late Color priceColor;
 
+  late String userId;
+
   // This function takes the variables inputed above and initialzes them in this state
   @override
   void initState() {
@@ -54,6 +57,8 @@ class _CondensedStoreView extends State<CondensedStoreView> {
     storeId = widget.storeId;
     drinkId = widget.drinkId;
     avgPrice = widget.avgPrice;
+
+    userId = widget.userId;
   }
 
   Future<String> storeIdInit() async {
@@ -88,14 +93,15 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                       // Const for now, will enevtually need to input the store id, so it can load the actual store data
                       builder: (BuildContext context) => ExpandedStoreView(
                         storeId: storeId,
-                        storeName: store.name,
+                        storeName: store.name, userId: userId,
                       ),
                     ),
                   );
                 },
                 child: Container(
                   // This is the outside container used to contain the view
-                  height: 98,
+                  height: 78, // HEIGHT SHOULD BE 98 - changed for franks
+
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.all(10),
                   

@@ -24,7 +24,8 @@ import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
 
 // (ListView is already a flutter class, so we should use ListScreen as to not mix up the two)
 class ListScreen extends StatefulWidget {
-  const ListScreen({super.key});
+  const ListScreen({super.key, required this.userId});
+  final String userId;
 
   @override
   State<ListScreen> createState() => _ListScreen();
@@ -32,6 +33,14 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreen extends State<ListScreen> {
   late List<String> storeIds;
+  late String userId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userId = widget.userId;
+  }
 
   final List<String> items = [
     'Beer',
@@ -238,7 +247,7 @@ class _ListScreen extends State<ListScreen> {
                                 Column(
                                   children: [
                                     CondensedStoreView(
-                                        storeId: storeId, drinkId: drinkId, avgPrice: avgPrice,),
+                                        storeId: storeId, drinkId: drinkId, avgPrice: avgPrice, userId: userId,),
                                   ],
                                 )
                             ],

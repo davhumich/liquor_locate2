@@ -9,11 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:liquor_locate2/Functions/open_maps.dart';
 import 'package:liquor_locate2/Functions/store_to_header_image.dart';
+import 'package:liquor_locate2/Functions/favorite_add.dart';
+import 'package:liquor_locate2/Functions/favorite_remove.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
+import 'package:favorite_button/favorite_button.dart';
+
 
 class StoreHeaderView extends StatelessWidget {
-  const StoreHeaderView({super.key, required this.store});
+  const StoreHeaderView({super.key, required this.store, required this.userId});
   final Store store;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +34,7 @@ class StoreHeaderView extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image:
-                            storeToHeaderImage(store.id),
+                        image: storeToHeaderImage(store.id),
                         fit: BoxFit.fitWidth),
                     boxShadow: [
                       BoxShadow(
@@ -53,8 +57,7 @@ class StoreHeaderView extends StatelessWidget {
                   child: ClipOval(
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
-                      child:
-                          store.logo,
+                      child: store.logo,
                     ),
                   ),
                 ),
@@ -77,13 +80,13 @@ class StoreHeaderView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Wrap(
                 alignment: WrapAlignment.start,
                 crossAxisAlignment: WrapCrossAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top:15, left:15, right:15, bottom: 5),
+                    margin: const EdgeInsets.only(
+                        top: 15, left: 15, right: 15, bottom: 5),
                     child: Text(
                       store.address,
                       style: const TextStyle(
@@ -101,7 +104,7 @@ class StoreHeaderView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(left:15, bottom: 15),
+                    margin: const EdgeInsets.only(left: 15, bottom: 15),
                     child: RatingBarIndicator(
                       rating: store.rating,
                       itemBuilder: (context, index) => const Icon(
@@ -113,16 +116,33 @@ class StoreHeaderView extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(left:5, bottom: 13),
+                    margin: const EdgeInsets.only(left: 5, bottom: 13),
                     child: Text(
-                    store.rating.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600
+                      store.rating.toString(),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 160, bottom: 15),
+                    width: 20,
+                    height: 20,
+                    child: FavoriteButton(
+                      iconSize: 40,
+                      isFavorite: false,
+                      valueChanged: (_isFavourite) {
+                        if (_isFavourite) {
+                          print("favorite");
+                          addToFavorites(userId, store.id);
+                        }
+                        else {
+                          print("unfavorite");
+                          removeFromFavorites(userId, store.id);
+                        }
+                        
+                      },
+                    ),
                   )
-                  
                 ],
               ),
             ],
@@ -137,7 +157,8 @@ class StoreHeaderView extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
               ),
               onPressed: () {
-                openAppleMaps(store.location.latitude, store.location.longitude, store.name);
+                openAppleMaps(store.location.latitude, store.location.longitude,
+                    store.name);
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,

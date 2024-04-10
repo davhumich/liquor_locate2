@@ -81,9 +81,9 @@ class _TabViewState extends State<TabView> {
       hideNavigationBarWhenKeyboardShows: true,
       controller: _controller,
       screens: [
-        const MapView(),
-        const ListScreen(),
-        ProfileView(userId: '', profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
+        const MapView(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1'),
+        const ListScreen(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1',),
+        ProfileView(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1', profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
       ],
       items: _navBarsItems(), // Referenced below
       navBarStyle: NavBarStyle.style1,

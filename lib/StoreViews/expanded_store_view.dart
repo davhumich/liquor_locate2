@@ -19,9 +19,10 @@ import 'package:liquor_locate2/StoreViews/store_header_view.dart';
 
 // (Stateful widget because eventually the data will need to chnage based on what store is being loaded)
 class ExpandedStoreView extends StatefulWidget {
-  const ExpandedStoreView({super.key, required this.storeId, required this.storeName});
+  const ExpandedStoreView({super.key, required this.storeId, required this.storeName, required this.userId});
   final String storeId;
   final String storeName;
+  final String userId;
 
   @override
   State<ExpandedStoreView> createState() => _ExpandedStoreView();
@@ -32,12 +33,14 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
   late String storeId;
   late List<Drink> drinks;
   late String storeName;
+  late String userId;
 
 @override
   void initState() {
     super.initState();
     storeId = widget.storeId;
     storeName = widget.storeName;
+    userId = widget.userId;
   }
 
   Future<String> storeInit() async {
@@ -73,7 +76,7 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
               } else {
                 return Column(
                   children: [
-                    StoreHeaderView(store: store),
+                    StoreHeaderView(store: store, userId: userId,),
                     Expanded(
             child: ListView.builder(
               itemCount: drinks.length,

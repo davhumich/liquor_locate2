@@ -8,10 +8,13 @@ on the list view and the map view
 */
 
 // Flutter tool packages
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 
 // External packages from pub.dev
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liquor_locate2/Functions/favorite_add.dart';
+import 'package:liquor_locate2/Functions/favorite_remove.dart';
 import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
 import 'package:liquor_locate2/Functions/price_to_color.dart';
@@ -25,7 +28,8 @@ class CondensedStoreView extends StatefulWidget {
       {super.key,
       required this.storeId,
       required this.drinkId,
-      required this.avgPrice, required this.userId});
+      required this.avgPrice,
+      required this.userId});
 
   // These are the varibles we input to the view so it will load with different stores
   // (Eventually we will only input a store id and load it from the database directly from this view)
@@ -93,35 +97,37 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                       // Const for now, will enevtually need to input the store id, so it can load the actual store data
                       builder: (BuildContext context) => ExpandedStoreView(
                         storeId: storeId,
-                        storeName: store.name, userId: userId,
+                        storeName: store.name,
+                        userId: userId,
                       ),
                     ),
                   );
                 },
                 child: Container(
                   // This is the outside container used to contain the view
-                  height: 78, // HEIGHT SHOULD BE 98 - changed for franks
+                  height: 98, // HEIGHT SHOULD BE 98 - 78 for frank
 
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.all(10),
-                  
+
                   decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(1, 1), // changes position of shadow
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      bottomLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
                     ),
-                  ],
-                ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(1, 1), // changes position of shadow
+                      ),
+                    ],
+                  ),
                   child: Row(
                     children: [
                       Padding(
@@ -149,7 +155,10 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Text(store.name, style: const TextStyle(fontSize: 16),),
+                              child: Text(
+                                store.name,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                             ),
                             Expanded(
                               child: FutureBuilder<String>(
@@ -210,14 +219,31 @@ class _CondensedStoreView extends State<CondensedStoreView> {
                       ),
                       const Spacer(),
                       // Price
-                      if (avgPrice > 0)
-                      Container(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text(
-                          "\$${drinkPrice.toStringAsFixed(2)}",
-                          style: TextStyle(fontSize: 18, color: priceColor),
-                        ),
-                      ),
+                      (avgPrice > 0)
+                          ? Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                "\$${drinkPrice.toStringAsFixed(2)}",
+                                style:
+                                    TextStyle(fontSize: 18, color: priceColor),
+                              ),
+                            )
+                          : Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: FavoriteButton(
+                                iconSize: 40,
+                                isFavorite: false,
+                                valueChanged: (_isFavourite) {
+                                  if (_isFavourite) {
+                                    print("favorite");
+                                    addToFavorites(userId, store.id);
+                                  } else {
+                                    print("unfavorite");
+                                    removeFromFavorites(userId, store.id);
+                                  }
+                                },
+                              ),
+                            ),
                     ],
                   ),
                 ),

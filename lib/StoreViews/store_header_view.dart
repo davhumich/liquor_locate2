@@ -1,12 +1,6 @@
-/*
-
-View for the store header
-
-*/
-
-// Flutter tool packages
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liquor_locate2/Functions/favorite_check.dart';
 import 'package:liquor_locate2/Functions/open_maps.dart';
 import 'package:liquor_locate2/Functions/store_to_header_image.dart';
 import 'package:liquor_locate2/Functions/favorite_add.dart';
@@ -14,11 +8,24 @@ import 'package:liquor_locate2/Functions/favorite_remove.dart';
 import 'package:liquor_locate2/Models/store_model.dart';
 import 'package:favorite_button/favorite_button.dart';
 
-
-class StoreHeaderView extends StatelessWidget {
-  const StoreHeaderView({super.key, required this.store, required this.userId});
+class StoreHeaderView extends StatefulWidget {
+  const StoreHeaderView({Key? key, required this.store, required this.userId}) : super(key: key);
+  
   final Store store;
   final String userId;
+
+  @override
+  _StoreHeaderViewState createState() => _StoreHeaderViewState();
+}
+
+class _StoreHeaderViewState extends State<StoreHeaderView> {
+  late Future<bool> _isFavoriteFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavoriteFuture = isStoreInFavorites(widget.userId, widget.store.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,7 @@ class StoreHeaderView extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: storeToHeaderImage(store.id),
+                        image: storeToHeaderImage(widget.store.id),
                         fit: BoxFit.fitWidth),
                     boxShadow: [
                       BoxShadow(
@@ -57,7 +64,7 @@ class StoreHeaderView extends StatelessWidget {
                   child: ClipOval(
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
-                      child: store.logo,
+                      child: widget.store.logo,
                     ),
                   ),
                 ),
@@ -88,7 +95,7 @@ class StoreHeaderView extends StatelessWidget {
                     margin: const EdgeInsets.only(
                         top: 15, left: 15, right: 15, bottom: 5),
                     child: Text(
-                      store.address,
+                      widget.store.address,
                       style: const TextStyle(
                         fontSize: 16,
                       ),
@@ -96,17 +103,13 @@ class StoreHeaderView extends StatelessWidget {
                   ),
                 ],
               ),
-              // const Divider(
-              //   height: 1,
-              //   thickness: 1,
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     margin: const EdgeInsets.only(left: 15, bottom: 15),
                     child: RatingBarIndicator(
-                      rating: store.rating,
+                      rating: widget.store.rating,
                       itemBuilder: (context, index) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -118,7 +121,7 @@ class StoreHeaderView extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(left: 5, bottom: 13),
                     child: Text(
-                      store.rating.toString(),
+                      widget.store.rating.toString(),
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600),
                     ),
@@ -127,19 +130,27 @@ class StoreHeaderView extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 160, bottom: 15),
                     width: 20,
                     height: 20,
-                    child: FavoriteButton(
-                      iconSize: 40,
-                      isFavorite: false,
-                      valueChanged: (_isFavourite) {
-                        if (_isFavourite) {
-                          print("favorite");
-                          addToFavorites(userId, store.id);
+                    child: FutureBuilder<bool>(
+                      future: _isFavoriteFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else {
+                          bool isFavorite = snapshot.data ?? false;
+                          return FavoriteButton(
+                            iconSize: 40,
+                            isFavorite: isFavorite,
+                            valueChanged: (_isFavourite) {
+                              if (_isFavourite) {
+                                print("favorite");
+                                addToFavorites(widget.userId, widget.store.id);
+                              } else {
+                                print("unfavorite");
+                                removeFromFavorites(widget.userId, widget.store.id);
+                              }
+                            },
+                          );
                         }
-                        else {
-                          print("unfavorite");
-                          removeFromFavorites(userId, store.id);
-                        }
-                        
                       },
                     ),
                   )
@@ -157,8 +168,8 @@ class StoreHeaderView extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
               ),
               onPressed: () {
-                openAppleMaps(store.location.latitude, store.location.longitude,
-                    store.name);
+                openAppleMaps(widget.store.location.latitude, widget.store.location.longitude,
+                    widget.store.name);
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,

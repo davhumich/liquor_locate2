@@ -1,19 +1,8 @@
-/*
-
-condensed_store_view.dart
-
-This is the view for the small store views that are displayed
-on the list view and the map view
-
-*/
-
-// Flutter tool packages
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
-
-// External packages from pub.dev
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:liquor_locate2/Functions/favorite_add.dart';
+import 'package:liquor_locate2/Functions/favorite_check.dart';
 import 'package:liquor_locate2/Functions/favorite_remove.dart';
 import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
@@ -24,27 +13,24 @@ import 'package:liquor_locate2/Placeholder%20Skeletons/condensed_store_placehold
 import 'package:liquor_locate2/StoreViews/expanded_store_view.dart';
 
 class CondensedStoreView extends StatefulWidget {
-  const CondensedStoreView(
-      {super.key,
-      required this.storeId,
-      required this.drinkId,
-      required this.avgPrice,
-      required this.userId});
+  const CondensedStoreView({
+    super.key,
+    required this.storeId,
+    required this.drinkId,
+    required this.avgPrice,
+    required this.userId,
+  });
 
-  // These are the varibles we input to the view so it will load with different stores
-  // (Eventually we will only input a store id and load it from the database directly from this view)
   final String storeId;
   final String drinkId;
   final double avgPrice;
   final String userId;
 
   @override
-  State<CondensedStoreView> createState() => _CondensedStoreView();
+  State<CondensedStoreView> createState() => _CondensedStoreViewState();
 }
 
-class _CondensedStoreView extends State<CondensedStoreView> {
-  // The variables initialzed in the actual view
-  // (The reason they are late is because they are initialzed in initState, which is called after the widget loads)
+class _CondensedStoreViewState extends State<CondensedStoreView> {
   late String storeId;
   late Store store;
   late String drinkId;
@@ -52,17 +38,31 @@ class _CondensedStoreView extends State<CondensedStoreView> {
   late double avgPrice;
   late Color priceColor;
 
+  late Future<bool> _isFavoriteFuture;
   late String userId;
 
-  // This function takes the variables inputed above and initialzes them in this state
   @override
   void initState() {
     super.initState();
     storeId = widget.storeId;
     drinkId = widget.drinkId;
     avgPrice = widget.avgPrice;
-
     userId = widget.userId;
+    _updateFavoriteStatus();
+  }
+
+  void _updateFavoriteStatus() {
+    _isFavoriteFuture = isStoreInFavorites(userId, storeId);
+  }
+
+  @override
+  void didUpdateWidget(covariant CondensedStoreView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.userId != widget.userId || oldWidget.storeId != widget.storeId) {
+      userId = widget.userId;
+      storeId = widget.storeId;
+      _updateFavoriteStatus();
+    }
   }
 
   Future<String> storeIdInit() async {
@@ -74,182 +74,178 @@ class _CondensedStoreView extends State<CondensedStoreView> {
 
   @override
   Widget build(BuildContext context) {
-    // This InkWell object makes it so when the user taps on this view,
-    // they will be taken to the expanded store view
     storeId = widget.storeId;
     drinkId = widget.drinkId;
     avgPrice = widget.avgPrice;
     return FutureBuilder(
-        future: storeIdInit(),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CondensedStorePlaceholder();
+      future: storeIdInit(),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CondensedStorePlaceholder();
+        } else {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              return InkWell(
-                onTap: () {
-                  // Pushes the Expanded store view onto the Widget Stack
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      // Const for now, will enevtually need to input the store id, so it can load the actual store data
-                      builder: (BuildContext context) => ExpandedStoreView(
-                        storeId: storeId,
-                        storeName: store.name,
-                        userId: userId,
-                      ),
+            return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => ExpandedStoreView(
+                      storeId: storeId,
+                      storeName: store.name,
+                      userId: userId,
                     ),
-                  );
-                },
-                child: Container(
-                  // This is the outside container used to contain the view
-                  height: 98, // HEIGHT SHOULD BE 98 - 78 for frank
-
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(10),
-
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      bottomLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(1, 1), // changes position of shadow
-                      ),
-                    ],
                   ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Container(
-                            // Store image Widget
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(width: 0.5, color: Colors.grey),
-                            ),
-                            child: ClipOval(
-                                child: SizedBox.fromSize(
-                              size: const Size.fromRadius(48), // Image radius
-                              child: store.logo,
-                            ))),
-                      ),
-                      Container(
-                        // Store name, milage and rating
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                store.name,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            ),
-                            Expanded(
-                              child: FutureBuilder<String>(
-                                future: getDistance(store.location),
-                                builder: (context, distanceSnapshot) {
-                                  if (distanceSnapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Text(
-                                        "Calculating distance...");
-                                  } else if (distanceSnapshot.hasError) {
-                                    return SizedBox(
-                                      width: 100,
-                                      child: Text(
-                                        'Error: ${distanceSnapshot.error}',
-                                        softWrap: true,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    );
-                                  } else {
-                                    return Container(
-                                      padding: const EdgeInsets.only(top: 2),
-                                      width: 200,
-                                      child: Text(
-                                        distanceSnapshot.data ??
-                                            'Unknown distance',
-                                        style: const TextStyle(fontSize: 14),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  RatingBarIndicator(
-                                    rating: store.rating,
-                                    itemBuilder: (context, index) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    itemCount: 5,
-                                    itemSize: 16,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 3),
-                                    child: Text(
-                                      store.rating.toString(),
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                );
+              },
+              child: Container(
+                height: 78,
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(1, 1),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(width: 0.5, color: Colors.grey),
+                        ),
+                        child: ClipOval(
+                          child: SizedBox.fromSize(
+                            size: const Size.fromRadius(48),
+                            child: store.logo,
+                          ),
                         ),
                       ),
-                      const Spacer(),
-                      // Price
-                      (avgPrice > 0)
-                          ? Container(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                "\$${drinkPrice.toStringAsFixed(2)}",
-                                style:
-                                    TextStyle(fontSize: 18, color: priceColor),
-                              ),
-                            )
-                          : Container(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: FavoriteButton(
-                                iconSize: 40,
-                                isFavorite: false,
-                                valueChanged: (_isFavourite) {
-                                  if (_isFavourite) {
-                                    print("favorite");
-                                    addToFavorites(userId, store.id);
-                                  } else {
-                                    print("unfavorite");
-                                    removeFromFavorites(userId, store.id);
-                                  }
-                                },
-                              ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              store.name,
+                              style: const TextStyle(fontSize: 16),
                             ),
-                    ],
-                  ),
+                          ),
+                          Expanded(
+                            child: FutureBuilder<String>(
+                              future: getDistance(store.location),
+                              builder: (context, distanceSnapshot) {
+                                if (distanceSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text("Calculating distance...");
+                                } else if (distanceSnapshot.hasError) {
+                                  return SizedBox(
+                                    width: 100,
+                                    child: Text(
+                                      'Error: ${distanceSnapshot.error}',
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                } else {
+                                  return Container(
+                                    padding: const EdgeInsets.only(top: 2),
+                                    width: 200,
+                                    child: Text(
+                                      distanceSnapshot.data ?? 'Unknown distance',
+                                      style: const TextStyle(fontSize: 14),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                RatingBarIndicator(
+                                  rating: store.rating,
+                                  itemBuilder: (context, index) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  itemCount: 5,
+                                  itemSize: 16,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 3),
+                                  child: Text(
+                                    store.rating.toString(),
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    (avgPrice > 0)
+                        ? Container(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Text(
+                              "\$${drinkPrice.toStringAsFixed(2)}",
+                              style: TextStyle(fontSize: 18, color: priceColor),
+                            ),
+                          )
+                        : Container(
+                            child: FutureBuilder<bool>(
+                              future: _isFavoriteFuture,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else {
+                                  bool isFavorite = snapshot.data ?? false;
+                                  return FavoriteButton(
+                                    iconSize: 40,
+                                    isFavorite: isFavorite,
+                                    valueChanged: (_isFavourite) {
+                                      if (_isFavourite) {
+                                        addToFavorites(userId, storeId);
+                                      } else {
+                                        removeFromFavorites(userId, storeId);
+                                      }
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                  ],
                 ),
-              );
-            }
+              ),
+            );
           }
-        });
+        }
+      },
+    );
   }
 }

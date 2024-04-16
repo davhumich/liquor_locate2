@@ -19,10 +19,17 @@ import 'package:liquor_locate2/StoreViews/store_header_view.dart';
 
 // (Stateful widget because eventually the data will need to chnage based on what store is being loaded)
 class ExpandedStoreView extends StatefulWidget {
-  const ExpandedStoreView({super.key, required this.storeId, required this.storeName, required this.userId});
+  const ExpandedStoreView({
+    super.key,
+    required this.storeId,
+    required this.storeName,
+    required this.userId,
+    required this.onFavoriteChanged,
+  });
   final String storeId;
   final String storeName;
   final String userId;
+  final VoidCallback onFavoriteChanged;
 
   @override
   State<ExpandedStoreView> createState() => _ExpandedStoreView();
@@ -34,13 +41,15 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
   late List<Drink> drinks;
   late String storeName;
   late String userId;
+  late VoidCallback onFavoriteChanged;
 
-@override
+  @override
   void initState() {
     super.initState();
     storeId = widget.storeId;
     storeName = widget.storeName;
     userId = widget.userId;
+    onFavoriteChanged = widget.onFavoriteChanged;
   }
 
   Future<String> storeInit() async {
@@ -66,53 +75,60 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Column(
-                  children: [
-                    StoreHeaderPlaceholder(),
-                  ],
-                );
+                children: [
+                  StoreHeaderPlaceholder(),
+                ],
+              );
             } else {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 return Column(
                   children: [
-                    StoreHeaderView(store: store, userId: userId,),
+                    StoreHeaderView(
+                        store: store,
+                        userId: userId,
+                        onFavoriteChanged: onFavoriteChanged),
                     Expanded(
-            child: ListView.builder(
-              itemCount: drinks.length,
-              itemBuilder: (BuildContext context, int index) {
-                // Display each drink
-                Drink drink = drinks[index];
-                return FutureBuilder<double>(
-                  future: initPrice(storeId, drink.id),
-                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return ListTile(
-                        title: Text('${drink.size} of ${drink.name}'),
-                        subtitle: const Text('Loading...'),
-                      );
-                    } else if (snapshot.hasError) {
-                      return ListTile(
-                        title: Text('${drink.size} of ${drink.name}'),
-                        subtitle: Text('Error: ${snapshot.error}'),
-                      );
-                    } else {
-                      double price = snapshot.data!;
-                      return ListTile(
-                        title: Text('${drink.size} of ${drink.name}'),
-                        subtitle: Text("\$${price.toStringAsFixed(2)}", style: const TextStyle(fontSize: 14),),
-                        trailing: Image.asset(
-                              drink.img,
-                              fit: BoxFit.cover,
-                            ),
-                      );
-                    }
-                  },
-                );
-              },
-            )
-              
-                )],
+                        child: ListView.builder(
+                      itemCount: drinks.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // Display each drink
+                        Drink drink = drinks[index];
+                        return FutureBuilder<double>(
+                          future: initPrice(storeId, drink.id),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<double> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return ListTile(
+                                title: Text('${drink.size} of ${drink.name}'),
+                                subtitle: const Text('Loading...'),
+                              );
+                            } else if (snapshot.hasError) {
+                              return ListTile(
+                                title: Text('${drink.size} of ${drink.name}'),
+                                subtitle: Text('Error: ${snapshot.error}'),
+                              );
+                            } else {
+                              double price = snapshot.data!;
+                              return ListTile(
+                                title: Text('${drink.size} of ${drink.name}'),
+                                subtitle: Text(
+                                  "\$${price.toStringAsFixed(2)}",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                trailing: Image.asset(
+                                  drink.img,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ))
+                  ],
                 );
               }
             }
@@ -120,8 +136,3 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
     );
   }
 }
-
-
-
-
-

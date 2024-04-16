@@ -19,12 +19,14 @@ class CondensedStoreView extends StatefulWidget {
     required this.drinkId,
     required this.avgPrice,
     required this.userId,
+    required this.onFavoriteChanged,
   });
 
   final String storeId;
   final String drinkId;
   final double avgPrice;
   final String userId;
+  final VoidCallback onFavoriteChanged;
 
   @override
   State<CondensedStoreView> createState() => _CondensedStoreViewState();
@@ -40,6 +42,7 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
 
   late Future<bool> _isFavoriteFuture;
   late String userId;
+  late VoidCallback onFavoriteChanged;
 
   @override
   void initState() {
@@ -48,6 +51,7 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
     drinkId = widget.drinkId;
     avgPrice = widget.avgPrice;
     userId = widget.userId;
+    onFavoriteChanged = widget.onFavoriteChanged;
     _updateFavoriteStatus();
   }
 
@@ -95,12 +99,13 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                       storeId: storeId,
                       storeName: store.name,
                       userId: userId,
+                      onFavoriteChanged: onFavoriteChanged,
                     ),
                   ),
                 );
               },
               child: Container(
-                height: 78,
+                height: 98, // 78 for frank, normally 98
                 padding: const EdgeInsets.all(10),
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -233,6 +238,7 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                                       } else {
                                         removeFromFavorites(userId, storeId);
                                       }
+                                      widget.onFavoriteChanged();
                                     },
                                   );
                                 }

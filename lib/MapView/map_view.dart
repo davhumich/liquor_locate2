@@ -50,7 +50,7 @@ class _MapView extends State<MapView> {
 
   // Controller for editing the text in the search bar
   TextEditingController textController = TextEditingController();
- 
+
   Set<Marker> markers = {}; // Updated to store markers dynamically
 
   LatLng userLatLng = LatLng(userLocation.latitude, userLocation.longitude);
@@ -79,27 +79,24 @@ class _MapView extends State<MapView> {
 
   void _onMarkerTapped(Marker marker) {
     setState(() {
-      if (selectedMarker != marker)
-       { 
+      if (selectedMarker != marker) {
         selectedMarker = marker;
         SelectedStore = marker.markerId.value;
-       }
-      else {
-      selectedMarker = null;
-      SelectedStore = "blank";
+      } else {
+        selectedMarker = null;
+        SelectedStore = "blank";
       }
     });
     print(selectedMarker);
   }
 
-
   // This is a function for if we want to initialize anything on the map when it is created
   void _onMapCreated(GoogleMapController controller) async {
     LocationPermission permission = await Geolocator.checkPermission();
 
-    if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever)
-    {
-        await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      await Geolocator.requestPermission();
     }
     userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.best,
@@ -109,15 +106,15 @@ class _MapView extends State<MapView> {
     await _fetchMarkersFromFirestore();
 
     mapController.animateCamera(CameraUpdate.newLatLngZoom(userLatLng!, 14.0));
-    
   }
 
   Future<void> _fetchMarkersFromFirestore() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('stores').get();
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('stores').get();
     setState(() {
       markers.clear();
     });
-    
+
     // Iterate through the documents and add markers
     snapshot.docs.forEach((DocumentSnapshot document) {
       if (document.exists) {
@@ -125,11 +122,11 @@ class _MapView extends State<MapView> {
         LatLng storeLocation = LatLng(geoPoint.latitude, geoPoint.longitude);
 
         Marker marker = Marker(
-          markerId: MarkerId(document.id),
-          position: storeLocation,
-          onTap: () => _onMarkerTapped(Marker(markerId: MarkerId(document.id), position: storeLocation)),
-          infoWindow: InfoWindow(title: document["Name"])
-        );
+            markerId: MarkerId(document.id),
+            position: storeLocation,
+            onTap: () => _onMarkerTapped(Marker(
+                markerId: MarkerId(document.id), position: storeLocation)),
+            infoWindow: InfoWindow(title: document["Name"]));
 
         setState(() {
           markers.add(marker);
@@ -137,6 +134,7 @@ class _MapView extends State<MapView> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,7 +169,7 @@ class _MapView extends State<MapView> {
                 ),
               ),
               // Search bar, doesn't do anything right now
-             Positioned(
+              Positioned(
                 top: 16.0,
                 left: 16.0,
                 right: 16.0,
@@ -182,21 +180,24 @@ class _MapView extends State<MapView> {
                     print("here");
                     final geolocation = await place.geolocation;
                     print(geolocation);
-                    LatLng searchCoordinates = LatLng(geolocation!.coordinates.latitude, geolocation!.coordinates.longitude);
+                    LatLng searchCoordinates = LatLng(
+                        geolocation!.coordinates.latitude,
+                        geolocation!.coordinates.longitude);
                     print(searchCoordinates.latitude);
                     print(searchCoordinates.longitude);
                     markers.forEach((marker) {
-                      if(marker.position.latitude == geolocation!.coordinates.latitude && marker.position.longitude == geolocation!.coordinates.longitude)
-                      {
+                      if (marker.position.latitude ==
+                              geolocation!.coordinates.latitude &&
+                          marker.position.longitude ==
+                              geolocation!.coordinates.longitude) {
                         inDB = true;
                         setState(() {
                           selectedMarker = marker;
                           SelectedStore = marker.markerId.value;
                         });
                       }
-                     });
-                    if(!inDB)
-                    {
+                    });
+                    if (!inDB) {
                       _onMapTapped(searchCoordinates);
                     }
                   },
@@ -209,12 +210,18 @@ class _MapView extends State<MapView> {
           if (SelectedStore != "blank")
             Container(
               decoration: BoxDecoration(
-                border: Border.all(color: const Color.fromARGB(255, 95, 95, 95)),
+                border:
+                    Border.all(color: const Color.fromARGB(255, 95, 95, 95)),
               ),
               child: CondensedStoreView(
                 storeId: SelectedStore,
                 drinkId: drinkId,
-                avgPrice: 0, userId: userId,
+                avgPrice: 0,
+                userId: userId,
+                onFavoriteChanged: () {
+                  // Callback to refresh the list
+                  print("onFavoriteChanged"); // Just trigger setState to rebuild the widget
+                },
               ),
             )
         ],
@@ -222,4 +229,3 @@ class _MapView extends State<MapView> {
     );
   }
 }
-

@@ -147,8 +147,8 @@ class _ListScreen extends State<ListScreen> {
                                             style: TextStyle(fontSize: 16),
                                           ),
                                           Container(
-                                            padding:
-                                                const EdgeInsets.only(right: 20),
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
                                             child: Text(
                                                 "\$${avgPrice.toStringAsFixed(2)}",
                                                 style: const TextStyle(
@@ -170,6 +170,12 @@ class _ListScreen extends State<ListScreen> {
                                       drinkId: drinkId,
                                       avgPrice: avgPrice,
                                       userId: userId,
+                                      onFavoriteChanged: () {
+                                        // Callback to refresh the list
+                                        print("onFavoriteChanged"); 
+                                        setState(() {});
+                                        // Just trigger setState to rebuild the widget
+                                      },
                                     ),
                                   ],
                                 )

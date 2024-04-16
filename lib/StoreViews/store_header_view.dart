@@ -9,10 +9,11 @@ import 'package:liquor_locate2/Models/store_model.dart';
 import 'package:favorite_button/favorite_button.dart';
 
 class StoreHeaderView extends StatefulWidget {
-  const StoreHeaderView({Key? key, required this.store, required this.userId}) : super(key: key);
+  const StoreHeaderView({Key? key, required this.store, required this.userId, required this.onFavoriteChanged,}) : super(key: key);
   
   final Store store;
   final String userId;
+  final VoidCallback onFavoriteChanged;
 
   @override
   _StoreHeaderViewState createState() => _StoreHeaderViewState();
@@ -148,6 +149,8 @@ class _StoreHeaderViewState extends State<StoreHeaderView> {
                                 print("unfavorite");
                                 removeFromFavorites(widget.userId, widget.store.id);
                               }
+                                print("onFavoriteChanged");
+                                widget.onFavoriteChanged();
                             },
                           );
                         }

@@ -170,6 +170,7 @@ class _ListScreen extends State<ListScreen> {
                                       drinkId: drinkId,
                                       avgPrice: avgPrice,
                                       userId: userId,
+                                      favStores: favStores,
                                       onFavoriteChanged: () {
                                         // Callback to refresh the list
                                         print("onFavoriteChanged"); 

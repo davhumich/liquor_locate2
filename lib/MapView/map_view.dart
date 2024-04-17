@@ -18,6 +18,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:liquor_locate2/Functions/calculate_average_price.dart';
 import 'package:liquor_locate2/Functions/drink_to_id.dart';
+import 'package:liquor_locate2/Functions/favorite_get.dart';
 import 'package:search_map_location/search_map_location.dart';
 
 // Internal files located in this directory
@@ -37,6 +38,7 @@ class MapView extends StatefulWidget {
 
 class _MapView extends State<MapView> {
   late String userId;
+  late List<String> favStores;
 
   @override
   void initState() {
@@ -110,6 +112,8 @@ class _MapView extends State<MapView> {
     userLatLng = LatLng(userLocation.latitude, userLocation.longitude);
     mapController = controller;
     await _fetchMarkersFromFirestore();
+    favStores = await getFavoriteStores(userId);
+
 
     mapController.animateCamera(CameraUpdate.newLatLngZoom(userLatLng!, 14.0));
     
@@ -221,6 +225,7 @@ class _MapView extends State<MapView> {
                 drinkId: drinkId,
                 avgPrice: 0,
                 userId: userId,
+                favStores: favStores,
                 onFavoriteChanged: () {
                   // Callback to refresh the list
                   print("onFavoriteChanged"); // Just trigger setState to rebuild the widget

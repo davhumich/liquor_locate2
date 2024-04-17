@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:liquor_locate2/Functions/favorite_add.dart';
 import 'package:liquor_locate2/Functions/favorite_check.dart';
+import 'package:liquor_locate2/Functions/favorite_get.dart';
 import 'package:liquor_locate2/Functions/favorite_remove.dart';
 import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
@@ -19,6 +20,7 @@ class CondensedStoreView extends StatefulWidget {
     required this.drinkId,
     required this.avgPrice,
     required this.userId,
+    required this.favStores,
     required this.onFavoriteChanged,
   });
 
@@ -26,6 +28,7 @@ class CondensedStoreView extends StatefulWidget {
   final String drinkId;
   final double avgPrice;
   final String userId;
+  final List<String> favStores;
   final VoidCallback onFavoriteChanged;
 
   @override
@@ -42,6 +45,7 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
 
   late Future<bool> _isFavoriteFuture;
   late String userId;
+  late List<String> favStores;
   late VoidCallback onFavoriteChanged;
 
   @override
@@ -51,6 +55,7 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
     drinkId = widget.drinkId;
     avgPrice = widget.avgPrice;
     userId = widget.userId;
+
     onFavoriteChanged = widget.onFavoriteChanged;
     _updateFavoriteStatus();
   }
@@ -62,7 +67,8 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
   @override
   void didUpdateWidget(covariant CondensedStoreView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.userId != widget.userId || oldWidget.storeId != widget.storeId) {
+    if (oldWidget.userId != widget.userId ||
+        oldWidget.storeId != widget.storeId) {
       userId = widget.userId;
       storeId = widget.storeId;
       _updateFavoriteStatus();
@@ -73,6 +79,8 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
     store = await initStore(storeId);
     drinkPrice = await initPrice(storeId, drinkId);
     priceColor = priceToColor(drinkPrice, avgPrice);
+    favStores = await getFavoriteStores(userId);
+
     return 'Done';
   }
 
@@ -177,7 +185,8 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                                     padding: const EdgeInsets.only(top: 2),
                                     width: 200,
                                     child: Text(
-                                      distanceSnapshot.data ?? 'Unknown distance',
+                                      distanceSnapshot.data ??
+                                          'Unknown distance',
                                       style: const TextStyle(fontSize: 14),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -213,13 +222,37 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                     ),
                     const Spacer(),
                     (avgPrice > 0)
+                      ? (favStores.contains(storeId))
                         ? Container(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Text(
-                              "\$${drinkPrice.toStringAsFixed(2)}",
-                              style: TextStyle(fontSize: 18, color: priceColor),
+                            padding: EdgeInsets.only(top: 10),
+                            child: Column(
+                              children: [
+                            FavoriteButton(
+                              iconSize: 25,
+                              isFavorite: true,
+                              valueChanged: (_isFavourite) {                                
+                              },
                             ),
+                            Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                "\$${drinkPrice.toStringAsFixed(2)}",
+                                style:
+                                    TextStyle(fontSize: 18, color: priceColor),
+                              ),
+                            )
+                            ]
+                            ) 
                           )
+                          : Container(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                "\$${drinkPrice.toStringAsFixed(2)}",
+                                style:
+                                    TextStyle(fontSize: 18, color: priceColor),
+                              ),
+                            )
+                          
                         : Container(
                             child: FutureBuilder<bool>(
                               future: _isFavoriteFuture,

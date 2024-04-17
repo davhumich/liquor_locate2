@@ -158,12 +158,28 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Text(
+                          Container(
+                            width: 198,
+                            child: Row(
+                            children: [
+                              Text(
                               store.name,
                               style: const TextStyle(fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
                             ),
+                            SizedBox(width: 10,),
+                            if (favStores.contains(storeId))
+                              FavoriteButton(
+                              iconSize: 30,
+                              isFavorite: true,
+                              valueChanged: (_isFavourite) {                                
+                              },
+                            ),
+                            ],
                           ),
+                          ),
+                          
+                          
                           Expanded(
                             child: FutureBuilder<String>(
                               future: getDistance(store.location),
@@ -227,12 +243,13 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                             padding: EdgeInsets.only(top: 10),
                             child: Column(
                               children: [
-                            FavoriteButton(
-                              iconSize: 25,
-                              isFavorite: true,
-                              valueChanged: (_isFavourite) {                                
-                              },
-                            ),
+                                SizedBox(height: 18,),
+                            // FavoriteButton(
+                            //   iconSize: 25,
+                            //   isFavorite: true,
+                            //   valueChanged: (_isFavourite) {                                
+                            //   },
+                            // ),
                             Container(
                               padding: const EdgeInsets.only(right: 10),
                               child: Text(

@@ -89,45 +89,45 @@ class _ExpandedStoreView extends State<ExpandedStoreView> {
                         store: store,
                         userId: userId,
                         onFavoriteChanged: onFavoriteChanged),
-                    // Expanded(
-                    //     child: ListView.builder(
-                    //   itemCount: drinks.length,
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     // Display each drink
-                    //     Drink drink = drinks[index];
-                    //     return FutureBuilder<double>(
-                    //       future: initPrice(storeId, drink.id),
-                    //       builder: (BuildContext context,
-                    //           AsyncSnapshot<double> snapshot) {
-                    //         if (snapshot.connectionState ==
-                    //             ConnectionState.waiting) {
-                    //           return ListTile(
-                    //             title: Text('${drink.size} of ${drink.name}'),
-                    //             subtitle: const Text('Loading...'),
-                    //           );
-                    //         } else if (snapshot.hasError) {
-                    //           return ListTile(
-                    //             title: Text('${drink.size} of ${drink.name}'),
-                    //             subtitle: Text('Error: ${snapshot.error}'),
-                    //           );
-                    //         } else {
-                    //           double price = snapshot.data!;
-                    //           return ListTile(
-                    //             title: Text('${drink.size} of ${drink.name}'),
-                    //             subtitle: Text(
-                    //               "\$${price.toStringAsFixed(2)}",
-                    //               style: const TextStyle(fontSize: 14),
-                    //             ),
-                    //             trailing: Image.asset(
-                    //               drink.img,
-                    //               fit: BoxFit.cover,
-                    //             ),
-                    //           );
-                    //         }
-                    //       },
-                    //     );
-                    //   },
-                    // ))
+                    Expanded(
+                        child: ListView.builder(
+                      itemCount: drinks.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // Display each drink
+                        Drink drink = drinks[index];
+                        return FutureBuilder<double>(
+                          future: initPrice(storeId, drink.id),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<double> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return ListTile(
+                                title: Text('${drink.size} of ${drink.name}'),
+                                subtitle: const Text('Loading...'),
+                              );
+                            } else if (snapshot.hasError) {
+                              return ListTile(
+                                title: Text('${drink.size} of ${drink.name}'),
+                                subtitle: Text('Error: ${snapshot.error}'),
+                              );
+                            } else {
+                              double price = snapshot.data!;
+                              return ListTile(
+                                title: Text('${drink.size} of ${drink.name}'),
+                                subtitle: Text(
+                                  "\$${price.toStringAsFixed(2)}",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                trailing: Image.asset(
+                                  drink.img,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ))
                   ],
                 );
               }

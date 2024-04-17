@@ -46,16 +46,16 @@ Future<List<String>> sortByDistance(List<String> storeIds) async{
 }
 
 Future<List<String>> sortByPrice(List<String> storeIds, String drinkId) async{
-  var storesCollection = FirebaseFirestore.instance.collection('prices').where("drinkId", isEqualTo: drinkId);
+  var storesCollection = FirebaseFirestore.instance.collection('stores');
 
   QuerySnapshot querySnapshot = await storesCollection.get();
   Map<String, double> storePrices = {};
 
   for (var document in querySnapshot.docs) {
     if (document.exists) {
-      String storeId = document["storeId"];
+      String storeId = document.id;
       if (storeIds.contains(storeId)){
-        double price = document["Price"];
+        double price = document[drinkId];
         storePrices[storeId] = price;
       }
     }

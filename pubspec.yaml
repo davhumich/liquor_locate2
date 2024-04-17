@@ -81,12 +81,42 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - lib/assets/Coronas.png
-  - lib/assets/titos.png
-  - lib/assets/Barefoot.png
-  - lib/assets/storeBackgroundImage.jpg
-  - lib/assets/fireball.png
-  - lib/assets/whiteClaw.png
+  - lib/assets/BeerImages/Coronas.png
+  - lib/assets/VodkaImages/titos.png
+  - lib/assets/WineImages/Barefoot.png
+  - lib/assets/WhiskeyImages/fireball.png
+  - lib/assets/SeltzerImages/White_Claw.png
+  - lib/assets/BeerImages/miller_light.png
+  - lib/assets/BeerImages/bud_light.png
+  - lib/assets/BeerImages/coors.png
+  - lib/assets/BeerImages/heineken.png
+  - lib/assets/WineImages/Apothic.png
+  - lib/assets/WineImages/Franzia.png
+  - lib/assets/WineImages/Sutter_Home.png
+  - lib/assets/WineImages/Yellow_Tail.png
+  - lib/assets/VodkaImages/Absolut.png
+  - lib/assets/VodkaImages/Grey_Goose.png
+  - lib/assets/VodkaImages/Smirnoff.png
+  - lib/assets/VodkaImages/Svedka.png
+  - lib/assets/TequilaImages/1800.png
+  - lib/assets/TequilaImages/Casamigos.png
+  - lib/assets/TequilaImages/Espolon.png
+  - lib/assets/TequilaImages/Jose_Cuervo.png
+  - lib/assets/TequilaImages/Patron.png
+  - lib/assets/WhiskeyImages/Jack_Daniels.png
+  - lib/assets/WhiskeyImages/Jameson.png
+  - lib/assets/WhiskeyImages/Jim_Beam.png
+  - lib/assets/WhiskeyImages/Screwball.png
+  - lib/assets/SeltzerImages/Bud_Light_Seltzer.png
+  - lib/assets/SeltzerImages/High_Noon.png
+  - lib/assets/SeltzerImages/Long_Drink.png
+  - lib/assets/SeltzerImages/Truly.png
+  - lib/assets/OtherImages/Baileys.png
+  - lib/assets/OtherImages/Beefeaters.png
+  - lib/assets/OtherImages/Captain_Morgan.png
+  - lib/assets/OtherImages/Hennessy.png
+  - lib/assets/OtherImages/jagermeister.png
+  - lib/assets/OtherImages/Malibu.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -111,11 +141,6 @@ flutter:
         - asset: lib/assets/Fonts/SF-Pro-Rounded-Semibold.otf
         - asset: lib/assets/Fonts/SF-Pro-Rounded-Thin.otf
         - asset: lib/assets/Fonts/SF-Pro-Rounded-Ultralight.otf
-        - asset: lib/assets/championsBG.jpg
-        - asset: lib/assets/mainStreetPartyBG.jpg
-        - asset: lib/assets/stadiumMarketBG.jpg
-        - asset: lib/assets/stricklandsBG.jpg
-        - asset: lib/assets/totalWineBG.jpg
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

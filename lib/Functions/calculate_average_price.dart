@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<double> calculateAveragePrice(String drinkId) async {
   double price = 0;
 
-  await FirebaseFirestore.instance.collection("prices").where("drinkId", isEqualTo: drinkId).get().then(
+  await FirebaseFirestore.instance.collection("stores").get().then(
       (querySnapshot) async {
         for (var docSnapshot in querySnapshot.docs) {
-          price += docSnapshot.data()["Price"];
+          price += docSnapshot.data()[drinkId];
         }
       },
       // ignore: avoid_print

@@ -1,14 +1,24 @@
+/*
+
+list_view.dart
+
+The view for the list tab, only contains UI, interactactivity with firebase
+should take place in an external file
+
+*/
+
 // Flutter tool packages
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:liquor_locate2/Functions/calculate_average_price.dart';
 import 'package:liquor_locate2/Functions/drink_to_id.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:liquor_locate2/Functions/drink_to_image.dart';
 import 'package:liquor_locate2/Functions/favorite_get.dart';
 import 'package:liquor_locate2/Functions/init_list_view.dart';
 import 'package:liquor_locate2/globals.dart';
 
 // External packages from pub.dev
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 // Internal files located in this directory
@@ -16,7 +26,7 @@ import 'package:liquor_locate2/StoreViews/condensed_store_view.dart';
 
 // (ListView is already a flutter class, so we should use ListScreen as to not mix up the two)
 class ListScreen extends StatefulWidget {
-  const ListScreen({Key? key, required this.userId}) : super(key: key);
+  const ListScreen({super.key, required this.userId});
   final String userId;
 
   @override
@@ -27,28 +37,58 @@ class _ListScreen extends State<ListScreen> {
   late List<String> storeIds;
   late String userId;
   late List<String> favStores;
-  late List<String> items;
-  String? selectedValue;
-  late double avgPrice;
-  late String drinkId;
-  late String sortBy;
 
   @override
   void initState() {
     super.initState();
     userId = widget.userId;
-    items = [
-      'Beer',
-      'Wine',
-      'Vodka',
-      'Whiskey',
-      'Seltzer',
-    ];
-    selectedValue = "Beer";
-    avgPrice = 0.0;
-    drinkId = "13Dclb3TMT1SgvVhLvnc";
-    sortBy = "Distance";
   }
+
+  final List<String> items = [
+    "Corona - 6 Pack",
+    "Miller Light - 6 Pack",
+    "Bud Light - 6 Pack",
+    "Coors - 6 Pack",
+    "Heineken - 6 Pack",
+    "Barefoot - Bottle",
+    "Franzia - Box",
+    "Sutter Home - Bottle",
+    "[yellow tail] - Bottle",
+    "Apothic - Bottle",
+    "Titos - Fifth",
+    "Smirnoff - Fifth",
+    "Absolut - Fifth",
+    "Svedka - Fifth",
+    "Grey Goose - Fifth",
+    "Jose Cuervo - Fifth",
+    "Patrón - Fifth",
+    "Casamigos - Fifth",
+    "Espolón - Fifth",
+    "1800 - Fifth",
+    "Jack Daniels - Fifth",
+    "Jim Beam - Fifth",
+    "Jameson - Fifth",
+    "Fireball - Fifth",
+    "Screwball - Fifth",
+    "White Claw - 6 Pack",
+    "Truly - 6 Pack",
+    "Bud Light Seltzer - 6 Pack",
+    "High Noon - 6 Pack",
+    "Long Drink - 6 Pack",
+    "Malibu - Fifth",
+    "Baileys - Fifth",
+    "Beefeaters - Fifth",
+    "Hennessey - Fifth",
+    "Jägermeister - Fifth",
+    "Captain Morgan - Fifth"
+  ];
+
+  String? selectedValue = "Corona - 6 Pack";
+  late double avgPrice;
+  String drinkId = "13Dclb3TMT1SgvVhLvnc";
+  String sortBy = "Distance";
+
+  
 
   Future<String> storeInit() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -83,6 +123,7 @@ class _ListScreen extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // The AppBar builds the top bar
         title: const Text(
           "Stores",
           style: TextStyle(color: Colors.white),
@@ -91,6 +132,7 @@ class _ListScreen extends State<ListScreen> {
         backgroundColor: const Color.fromARGB(255, 236, 87, 95),
       ),
       body: Stack(
+        // (Using a stack here so the search bar doesn't push the other widgets down when it is expanded)
         children: [
           FutureBuilder(
               future: storeInit(),
@@ -107,6 +149,7 @@ class _ListScreen extends State<ListScreen> {
                           child: Column(
                             children: [
                               ClipPath(
+                                // ClipPath is an external package we used for the red wave border at the top of the view
                                 clipper: WaveClipperOne(flip: true),
                                 child: Container(
                                   padding: const EdgeInsets.only(
@@ -116,14 +159,11 @@ class _ListScreen extends State<ListScreen> {
                                       const Color.fromARGB(255, 255, 231, 231),
                                   child: Row(
                                     children: [
-                                      if (selectedValue == "Beer")
-                                        const Row(
+                                        Row(
                                           children: [
                                             SizedBox(
                                               width: 40,
-                                              child: Image(
-                                                  image: AssetImage(
-                                                      'lib/assets/Coronas.png')),
+                                              child: drinkToImage(selectedValue!),
                                             ),
                                             SizedBox(
                                               width: 20,
@@ -131,14 +171,14 @@ class _ListScreen extends State<ListScreen> {
                                             SizedBox(
                                               width: 170,
                                               child: Text(
-                                                "6 Pack of Corona",
+                                                selectedValue!,
                                                 maxLines: 2,
                                                 style: TextStyle(fontSize: 22),
                                               ),
                                             )
                                           ],
                                         ),
-                                      // Add conditions for other selected values here
+                                      
                                       const Spacer(),
                                       Column(
                                         children: [
@@ -161,22 +201,14 @@ class _ListScreen extends State<ListScreen> {
                                   ),
                                 ),
                               ),
-                              // List of stores
+                              // This is where the list of stores begin
                               for (var storeId in storeIds)
                                 Column(
                                   children: [
                                     CondensedStoreView(
                                       storeId: storeId,
                                       drinkId: drinkId,
-                                      avgPrice: avgPrice,
-                                      userId: userId,
-                                      favStores: favStores,
-                                      onFavoriteChanged: () {
-                                        // Callback to refresh the list
-                                        print("onFavoriteChanged"); 
-                                        setState(() {});
-                                        // Just trigger setState to rebuild the widget
-                                      },
+                                      avgPrice: avgPrice, userId: userId, favStores: [], onFavoriteChanged: () {  },
                                     ),
                                   ],
                                 )
@@ -187,7 +219,8 @@ class _ListScreen extends State<ListScreen> {
                 }
               }),
 
-          // Search bar and sort button
+          // This is the search bar, it is at the bottom so that it will be at the top of the
+          // stack when the view loads, this way, when it expands it will be in front of the store views
           Container(
             color: const Color.fromARGB(255, 255, 231, 231),
             child: Row(
@@ -208,7 +241,8 @@ class _ListScreen extends State<ListScreen> {
                         color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 1,
                         blurRadius: 5,
-                        offset: const Offset(1, 1),
+                        offset:
+                            const Offset(1, 1), // changes position of shadow
                       ),
                     ],
                   ),
@@ -266,59 +300,62 @@ class _ListScreen extends State<ListScreen> {
                         color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 1,
                         blurRadius: 5,
-                        offset: const Offset(1, 1),
+                        offset:
+                            const Offset(1, 1), // changes position of shadow
                       ),
                     ],
                   ),
                   child: PopupMenuButton(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                    icon: const Icon(Icons.sort),
-                    itemBuilder: (context) {
-                      return [
-                        const PopupMenuItem<int>(
-                          value: 0,
-                          child: SizedBox(
-                            width: 140,
-                            child: Text(
-                              "Sort by Distance",
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                        ),
-                        const PopupMenuItem<int>(
-                          padding: EdgeInsets.all(0),
-                          height: 1,
-                          value: 2,
-                          child: Divider(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(12.0))),
+                      icon: const Icon(Icons.sort),
+                      itemBuilder: (context) {
+                        return [
+                          const PopupMenuItem<int>(
+                              value: 0,
+                              child: SizedBox(
+                                width: 140,
+                                child: Text(
+                                  "Sort by Distance",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              )),
+                          const PopupMenuItem<int>(
+                            padding: EdgeInsets.all(0),
                             height: 1,
-                          ),
-                        ),
-                        const PopupMenuItem<int>(
-                          value: 1,
-                          child: SizedBox(
-                            width: 140,
-                            child: Text(
-                              "Sort by Price",
-                              style: TextStyle(fontSize: 15),
+                            value: 2,
+                            child: Divider(
+                              height: 1,
                             ),
                           ),
-                        ),
-                      ];
-                    },
-                    onSelected: (value) {
-                      if (value == 0) {
-                        setState(() {
-                          sortBy = "Distance";
-                        });
-                      }
-                      if (value == 1) {
-                        setState(() {
-                          sortBy = "Price";
-                        });
-                      }
-                    },
-                  ),
+                          const PopupMenuItem<int>(
+                              value: 1,
+                              child: SizedBox(
+                                width: 140,
+                                child: Text(
+                                  "Sort by Price",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              )),
+                        ];
+                      },
+                      onSelected: (value) {
+                        if (value == 0) {
+                          setState(
+                            () {
+                              sortBy = "Distance";
+                            },
+                          );
+                        }
+                        if (value == 1) {
+                          setState(
+                            () {
+                              sortBy = "Price";
+                            },
+                          );
+                        }
+                      }),
                 )
               ],
             ),

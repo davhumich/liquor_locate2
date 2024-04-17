@@ -162,7 +162,7 @@ class _MapView extends State<MapView> {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 305,
+                height: MediaQuery.of(context).size.height - 325,
                 // This is the GoogleMap widget, everything is manged by
                 // Google's API so we only need to import this widget
                 child: GoogleMap(

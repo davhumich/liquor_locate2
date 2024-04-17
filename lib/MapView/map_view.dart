@@ -228,6 +228,7 @@ class _MapView extends State<MapView> {
                 favStores: favStores,
                 onFavoriteChanged: () {
                   // Callback to refresh the list
+                  
                   print("onFavoriteChanged"); // Just trigger setState to rebuild the widget
                 },
               ),

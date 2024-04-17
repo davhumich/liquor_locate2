@@ -254,29 +254,29 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                             )
                           
                         : Container(
-                            child: FutureBuilder<bool>(
-                              future: _isFavoriteFuture,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else {
-                                  bool isFavorite = snapshot.data ?? false;
-                                  return FavoriteButton(
-                                    iconSize: 40,
-                                    isFavorite: isFavorite,
-                                    valueChanged: (_isFavourite) {
-                                      if (_isFavourite) {
-                                        addToFavorites(userId, storeId);
-                                      } else {
-                                        removeFromFavorites(userId, storeId);
-                                      }
-                                      widget.onFavoriteChanged();
-                                    },
-                                  );
-                                }
-                              },
-                            ),
+                            // child: FutureBuilder<bool>(
+                            //   future: _isFavoriteFuture,
+                            //   builder: (context, snapshot) {
+                            //     if (snapshot.connectionState ==
+                            //         ConnectionState.waiting) {
+                            //       return CircularProgressIndicator();
+                            //     } else {
+                            //       bool isFavorite = snapshot.data ?? false;
+                            //       return FavoriteButton(
+                            //         iconSize: 40,
+                            //         isFavorite: isFavorite,
+                            //         valueChanged: (_isFavourite) {
+                            //           if (_isFavourite) {
+                            //             addToFavorites(userId, storeId);
+                            //           } else {
+                            //             removeFromFavorites(userId, storeId);
+                            //           }
+                            //           widget.onFavoriteChanged();
+                            //         },
+                            //       );
+                            //     }
+                            //   },
+                            // ),
                           ),
                   ],
                 ),

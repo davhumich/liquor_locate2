@@ -13,19 +13,19 @@ import 'package:flutter/material.dart';
 
 //Firebase Packages
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:liquor_locate2/ProfileView/placeholder.dart';
+import 'package:liquor_locate2/ProfileView/settings_delete_account.dart';
+import 'package:liquor_locate2/ProfileView/settings_edit_profile.dart';
 
 // ignore: must_be_immutable
 class ProfileView extends StatelessWidget {
   ProfileView(
-      {Key? key,
+      {super.key,
       required this.userId,
       required this.profilePic,
       required this.headerImage,
       required this.username,
       required this.firstName,
-      required this.lastName})
-      : super(key: key);
+      required this.lastName});
   final String username;
   final String userId;
   final AssetImage profilePic;
@@ -93,7 +93,7 @@ class ProfileView extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              const GreenFrog(),
+                              SettingsEditProfileView(userId: userId, selectedProfilePicImage: profilePic, firstName: firstName, lastName: lastName),
                         ),
                       );
                     },
@@ -168,7 +168,7 @@ class ProfileView extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const GreenFrog()
+                                SettingsDeleteAccountView(username: "usernameTemp", userId: userId)
                           ),
                         );
                       },

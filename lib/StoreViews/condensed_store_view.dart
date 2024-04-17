@@ -1,10 +1,8 @@
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:liquor_locate2/Functions/favorite_add.dart';
 import 'package:liquor_locate2/Functions/favorite_check.dart';
 import 'package:liquor_locate2/Functions/favorite_get.dart';
-import 'package:liquor_locate2/Functions/favorite_remove.dart';
 import 'package:liquor_locate2/Functions/init_price.dart';
 import 'package:liquor_locate2/Functions/init_store.dart';
 import 'package:liquor_locate2/Functions/price_to_color.dart';
@@ -158,7 +156,7 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 198,
                             child: Row(
                             children: [
@@ -167,12 +165,12 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                               style: const TextStyle(fontSize: 16),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(width: 10,),
+                            const SizedBox(width: 10,),
                             if (favStores.contains(storeId))
                               FavoriteButton(
                               iconSize: 30,
                               isFavorite: true,
-                              valueChanged: (_isFavourite) {                                
+                              valueChanged: (isFavourite) {                                
                               },
                             ),
                             ],
@@ -240,10 +238,10 @@ class _CondensedStoreViewState extends State<CondensedStoreView> {
                     (avgPrice > 0)
                       ? (favStores.contains(storeId))
                         ? Container(
-                            padding: EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 10),
                             child: Column(
                               children: [
-                                SizedBox(height: 18,),
+                                const SizedBox(height: 18,),
                             // FavoriteButton(
                             //   iconSize: 25,
                             //   isFavorite: true,

@@ -165,7 +165,7 @@ class _ListScreen extends State<ListScreen> {
                                               width: 40,
                                               child: drinkToImage(selectedValue!),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             SizedBox(
@@ -173,7 +173,7 @@ class _ListScreen extends State<ListScreen> {
                                               child: Text(
                                                 selectedValue!,
                                                 maxLines: 2,
-                                                style: TextStyle(fontSize: 22),
+                                                style: const TextStyle(fontSize: 22),
                                               ),
                                             )
                                           ],
@@ -208,7 +208,7 @@ class _ListScreen extends State<ListScreen> {
                                     CondensedStoreView(
                                       storeId: storeId,
                                       drinkId: drinkId,
-                                      avgPrice: avgPrice, userId: userId, favStores: [], onFavoriteChanged: () {  },
+                                      avgPrice: avgPrice, userId: userId, favStores: const [], onFavoriteChanged: () { setState(() {}); },
                                     ),
                                   ],
                                 )

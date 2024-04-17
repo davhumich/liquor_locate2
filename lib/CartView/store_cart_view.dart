@@ -126,7 +126,7 @@ class _StoreCartView extends State<StoreCartView> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 150,
                             child: Text(store.name, style: const TextStyle(fontSize: 16), overflow: TextOverflow.ellipsis,),
                           ),
@@ -183,7 +183,7 @@ class _StoreCartView extends State<StoreCartView> {
                         ],
                       ),
                       const Spacer(),
-                      Text("\$" + finalArray.reduce((a, b) => a + b).toStringAsFixed(2), style: TextStyle(fontSize: 18),)
+                      Text("\$${finalArray.reduce((a, b) => a + b).toStringAsFixed(2)}", style: const TextStyle(fontSize: 18),)
                     ],
                   ),
                   content: Column(
@@ -193,10 +193,10 @@ class _StoreCartView extends State<StoreCartView> {
                         Column(
                           children: [
                             if (numberDrinks[i] != 0)
-                              Text(drinkIndexToValue(i) + ":    \$"+ drinksPricesArray[i].toStringAsFixed(2) + "   x   "+ numberDrinks[i].toStringAsFixed(0) + "   =   \$" + (drinksPricesArray[i] * numberDrinks[i]).toStringAsFixed(2), style: TextStyle(fontSize: 16),)
+                              Text("${drinkIndexToValue(i)}:    \$${drinksPricesArray[i].toStringAsFixed(2)}   x   ${numberDrinks[i].toStringAsFixed(0)}   =   \$${(drinksPricesArray[i] * numberDrinks[i]).toStringAsFixed(2)}", style: const TextStyle(fontSize: 16),)
                           ],
                         ),
-                        Text(" = \$" + finalArray.reduce((a, b) => a + b).toStringAsFixed(2), style: TextStyle(fontSize: 16),)
+                        Text(" = \$${finalArray.reduce((a, b) => a + b).toStringAsFixed(2)}", style: const TextStyle(fontSize: 16),)
                     ],
                   ),
                   onTap: () {},

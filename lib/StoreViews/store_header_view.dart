@@ -135,14 +135,14 @@ class _StoreHeaderViewState extends State<StoreHeaderView> {
                       future: _isFavoriteFuture,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         } else {
                           bool isFavorite = snapshot.data ?? false;
                           return FavoriteButton(
                             iconSize: 40,
                             isFavorite: isFavorite,
-                            valueChanged: (_isFavourite) {
-                              if (_isFavourite) {
+                            valueChanged: (isFavourite) {
+                              if (isFavourite) {
                                 print("favorite");
                                 addToFavorites(widget.userId, widget.store.id);
                               } else {

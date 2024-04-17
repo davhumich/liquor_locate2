@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:liquor_locate2/ListView/list_view.dart';
+import 'package:liquor_locate2/Onboarding/auth_gate.dart';
 import 'package:liquor_locate2/firebase_options.dart';
 import 'package:liquor_locate2/CartView/cart_view.dart';
 
@@ -54,7 +55,7 @@ class LiquorLocate extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TabView(title: 'Liquor Locate Home View'),
+      home: AuthGate()
     );
   }
 }
@@ -62,14 +63,23 @@ class LiquorLocate extends StatelessWidget {
 // Widget for building tab controller at bottom of screen, also manages switching between tabs
 // (Stateful because its data will change i.e. the "tabs")
 class TabView extends StatefulWidget {
-  const TabView({super.key, required this.title});
+  const TabView({super.key, required this.title, required this.currentUserId});
   final String title;
+  final String currentUserId;
 
   @override
   State<TabView> createState() => _TabViewState();
 }
 
 class _TabViewState extends State<TabView> {
+  late String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    userId = widget.currentUserId;
+  }
+
 
   // The controller to manage everything involved with the TabView
   final PersistentTabController _controller =
@@ -82,10 +92,10 @@ class _TabViewState extends State<TabView> {
       hideNavigationBarWhenKeyboardShows: true,
       controller: _controller,
       screens: [
-        const MapView(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1'),
-        const ListScreen(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1',),
+        MapView(userId: userId),
+        ListScreen(userId: userId,),
         const CartView(),
-        ProfileView(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1', profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
+        ProfileView(userId: userId, profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
       ],
       items: _navBarsItems(), // Referenced below
       navBarStyle: NavBarStyle.style1,

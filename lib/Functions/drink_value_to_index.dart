@@ -1,5 +1,4 @@
 
-import 'package:flutter/material.dart';
 
 int drinkValueToIndex(String value){
   if (value == "Corona - 6 Pack"){

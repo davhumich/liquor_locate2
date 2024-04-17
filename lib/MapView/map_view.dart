@@ -12,12 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // External packages from pub.dev
-import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:liquor_locate2/Functions/calculate_average_price.dart';
-import 'package:liquor_locate2/Functions/drink_to_id.dart';
 import 'package:liquor_locate2/Functions/favorite_get.dart';
 import 'package:search_map_location/search_map_location.dart';
 
@@ -115,7 +111,7 @@ class _MapView extends State<MapView> {
     favStores = await getFavoriteStores(userId);
 
 
-    mapController.animateCamera(CameraUpdate.newLatLngZoom(userLatLng!, 14.0));
+    mapController.animateCamera(CameraUpdate.newLatLngZoom(userLatLng, 14.0));
     
   }
 
@@ -126,7 +122,7 @@ class _MapView extends State<MapView> {
     });
     
     // Iterate through the documents and add markers
-    snapshot.docs.forEach((DocumentSnapshot document) {
+    for (var document in snapshot.docs) {
       if (document.exists) {
         GeoPoint geoPoint = document["StorePosition"];
         LatLng storeLocation = LatLng(geoPoint.latitude, geoPoint.longitude);
@@ -142,7 +138,7 @@ class _MapView extends State<MapView> {
           markers.add(marker);
         });
       }
-    });
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -179,21 +175,22 @@ class _MapView extends State<MapView> {
               ),
               // Search bar, doesn't do anything right now
              Container(
-                margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                constraints: BoxConstraints(maxHeight: 362),
+                margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                constraints: const BoxConstraints(maxHeight: 362),
                 child: SearchLocation(
                   apiKey: 'AIzaSyCsHkeL1M3Nx6-yoheQ9x7_qbQp0qp5XCs',
                   radius: 15000,
                   onSelected: (place) async {
                     bool inDB = false;
                     final geolocation = await place.geolocation;
-                    LatLng searchCoordinates = LatLng(geolocation!.coordinates.latitude, geolocation!.coordinates.longitude);
+                    LatLng searchCoordinates = LatLng(geolocation!.coordinates.latitude, geolocation.coordinates.longitude);
                     mapController.animateCamera(CameraUpdate.newLatLng(searchCoordinates));
                     
-                    if(selectedMarker != null)
+                    if(selectedMarker != null) {
                       mapController.hideMarkerInfoWindow(selectedMarker!.markerId);
-                    markers.forEach((marker) {
-                      if(marker.position.latitude == geolocation!.coordinates.latitude && marker.position.longitude == geolocation!.coordinates.longitude)
+                    }
+                    for (var marker in markers) {
+                      if(marker.position.latitude == geolocation.coordinates.latitude && marker.position.longitude == geolocation.coordinates.longitude)
                       {
                         inDB = true;
                         setState(() {
@@ -202,7 +199,7 @@ class _MapView extends State<MapView> {
                           mapController.showMarkerInfoWindow(selectedMarker!.markerId);
                         });
                       }
-                     });
+                     }
 
                     if(!inDB)
                     {

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:liquor_locate2/ListView/list_view.dart';
 import 'package:liquor_locate2/firebase_options.dart';
+import 'package:liquor_locate2/CartView/cart_view.dart';
 
 // External packages from pub.dev
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -83,6 +84,7 @@ class _TabViewState extends State<TabView> {
       screens: [
         const MapView(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1'),
         const ListScreen(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1',),
+        const CartView(),
         ProfileView(userId: 'VokcXaKG1pT2GTydG8VkktCaHax1', profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
       ],
       items: _navBarsItems(), // Referenced below
@@ -115,6 +117,12 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
     PersistentBottomNavBarItem(
       icon: const Icon(CupertinoIcons.list_dash),
       title: ("Stores"),
+      activeColorPrimary: const Color(0xFF7D6756),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(CupertinoIcons.shopping_cart),
+      title: ("My Cart"),
       activeColorPrimary: const Color(0xFF7D6756),
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),

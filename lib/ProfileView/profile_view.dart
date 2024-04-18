@@ -168,7 +168,7 @@ class ProfileView extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                SettingsDeleteAccountView(username: "usernameTemp", userId: userId)
+                                SettingsDeleteAccountView(username: username, userId: userId)
                           ),
                         );
                       },

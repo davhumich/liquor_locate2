@@ -9,6 +9,7 @@ the tab controller so we can switch between tabs.
 
 
 // Flutter tool packages
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -73,11 +74,32 @@ class TabView extends StatefulWidget {
 
 class _TabViewState extends State<TabView> {
   late String userId;
+  late AssetImage profilePic;
+  late String username;
+  late String firstname;
+  late String lastName;
 
   @override
   void initState() {
     super.initState();
     userId = widget.currentUserId;
+  }
+
+  Future<String> tabViewInit() async {
+    final docRef = FirebaseFirestore.instance.collection("users").doc(userId);
+
+  await docRef.get().then((DocumentSnapshot doc) async {
+    Map<String, dynamic> data;
+
+    if (doc.data() != null) {
+      data = doc.data() as Map<String, dynamic>;
+      profilePic = AssetImage(data["profilePic"]);
+      username = data["userName"];
+      firstname = data["firstName"];
+      lastName = data["lastName"];
+    }
+  });
+    return 'Done';
   }
 
 
@@ -87,7 +109,16 @@ class _TabViewState extends State<TabView> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
+    return FutureBuilder(
+      future: tabViewInit(),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("");
+        } else {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return PersistentTabView(
       context,
       hideNavigationBarWhenKeyboardShows: true,
       controller: _controller,
@@ -95,7 +126,7 @@ class _TabViewState extends State<TabView> {
         MapView(userId: userId),
         ListScreen(userId: userId,),
         const CartView(),
-        ProfileView(userId: userId, profilePic: const AssetImage('lib/assets/fireball.png'), headerImage: const AssetImage(''), username: 'davidh', firstName: 'David', lastName: 'Harrell',),
+        ProfileView(userId: userId, profilePic: profilePic, headerImage: const AssetImage(''), username: username, firstName: firstname, lastName: lastName,),
       ],
       items: _navBarsItems(), // Referenced below
       navBarStyle: NavBarStyle.style1,
@@ -112,6 +143,9 @@ class _TabViewState extends State<TabView> {
           ),
         ],
       ),
+    );}
+        }
+      }
     );
   }
 
